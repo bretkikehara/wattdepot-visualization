@@ -35,6 +35,6 @@
 	</repositories>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<processing.version>2.0b1</processing.version>
+		<processing.version>2.0b3</processing.version>
 	</properties>
 </project>

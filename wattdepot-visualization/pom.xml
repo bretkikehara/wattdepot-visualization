@@ -1,17 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>edu.hawaii.wattdepot</groupId>
+	<groupId>org.wattdepot</groupId>
 	<artifactId>wattdepot-visualization</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<!-- TODO project name  -->
 	<name>wattdepot-visualization</name>
 	<description></description>
-	<!--
-		TODO <organization> <name>company name</name> <url>company url</url>
-		</organization>
-	-->
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -20,13 +15,29 @@
 		</license>
 	</licenses>
 	<properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<targetJdk>1.6</targetJdk>
+		<maven.build.timestamp.format>MMdd</maven.build.timestamp.format>
+		<build.version>${project.version}.${maven.build.timestamp}</build.version>
+
+		<!-- Dependency Versions -->
 		<wicket.version>1.5.8</wicket.version>
 		<jetty.version>7.5.0.v20110901</jetty.version>
 		<gson.version>2.2.2</gson.version>
+
+		<!-- Maven Plugin versions -->
+		<checkstyle.plugin.version>2.8</checkstyle.plugin.version>
+		<findbugs.plugin.version>2.4.0</findbugs.plugin.version>
+		<javadoc.plugin.version>2.8.1</javadoc.plugin.version>
+		<pmd.plugin.version>2.6</pmd.plugin.version>
+
+		<!-- Directory definitions -->
+		<config.dir>${basedir}</config.dir>
+		<findbugs.filter.file>${config.dir}/findbugs.exclude.xml</findbugs.filter.file>
+		<checkstyle.filter.file>${config.dir}/checkstyle.xml</checkstyle.filter.file>
 	</properties>
 	<dependencies>
-		<!--  WICKET DEPENDENCIES -->
+		<!-- WICKET DEPENDENCIES -->
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-core</artifactId>
@@ -50,7 +61,7 @@
 			<version>1.2.16</version>
 		</dependency>
 
-		<!--  JUNIT DEPENDENCY FOR TESTING -->
+		<!-- JUNIT DEPENDENCY FOR TESTING -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -58,7 +69,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--  JETTY DEPENDENCIES FOR TESTING  -->
+		<!-- JETTY DEPENDENCIES FOR TESTING -->
 		<dependency>
 			<groupId>org.eclipse.jetty.aggregate</groupId>
 			<artifactId>jetty-all-server</artifactId>
@@ -145,6 +156,26 @@
 					<downloadSources>true</downloadSources>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${checkstyle.plugin.version}</version>
+				<configuration>
+					<configLocation>${checkstyle.filter.file}</configLocation>
+					<excludes>**/tinker/**, **/jaxb/**
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
@@ -161,4 +192,7 @@
 		</repository>
 	</repositories>
 
-	</project>
+	<scm>
+		<url>https://github.com/kiyomasa84/wattdepot-visualization</url>
+	</scm>
+</project>
