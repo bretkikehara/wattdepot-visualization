@@ -10,24 +10,14 @@ import org.wattdepot.visualization.page.home.HomePage;
  * @author Bret K. Ikehara
  */
 public class VisualizationApplication extends WebApplication {
-  
+
   /**
    * @see org.apache.wicket.Application#getHomePage()
    * 
-   * @return {@link Class}&lt;? extends {@link BasePage}> 
+   * @return {@link Class}&lt;? extends {@link BasePage}>
    */
   @Override
   public Class<? extends BasePage> getHomePage() {
     return HomePage.class;
-  }
-
-  /**
-   * @see org.apache.wicket.Application#init()
-   */
-  @Override
-  public void init() {
-    super.init();
-
-    // add your configuration here
   }
 }
