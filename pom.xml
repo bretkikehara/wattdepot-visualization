@@ -342,8 +342,7 @@
 			</plugin>
 			<!-- Package it up for Heroku during "package" phase -->
 			<plugin>
-				<groupId>org.codehaus.mojo
-      </groupId>
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
 				<version>${appassembler.plugin.version}</version>
 				<executions>
@@ -378,7 +377,6 @@
 			</snapshots>
 		</repository>
 	</repositories>
-
 	<scm>
 		<url>https://github.com/kiyomasa84/wattdepot-visualization</url>
 	</scm>
