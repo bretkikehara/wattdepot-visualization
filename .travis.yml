@@ -1,5 +1,6 @@
 language: java
-scripts: ./wattdepot-visualization/mvn test
+script:
+  "./wattdepot-visualization/mvn test"
 branches:
   only:
     - master
