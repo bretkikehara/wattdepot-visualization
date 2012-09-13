@@ -1,10 +1,8 @@
-#ignore thumbnails created by windows
+# system files
+.DS_Store
 Thumbs.db
 
-#ignore mac os files
-.DS_store
-
-#java
+# java
 *.class
 
 # Package Files #
@@ -13,4 +11,4 @@ Thumbs.db
 *.ear
 
 # maven
-*/target/
+target/
