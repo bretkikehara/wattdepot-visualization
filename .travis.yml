@@ -1,4 +1,9 @@
 language: java
+scripts: ./wattdepot-visualization/mvn test
+branches:
+  only:
+    - master
+    - stable
 jdk:
   - oraclejdk7
   - openjdk7
