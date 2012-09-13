@@ -1,21 +1,23 @@
 package org.wattdepot.visualization;
 
 import org.apache.wicket.protocol.http.WebApplication;
+import org.wattdepot.visualization.page.BasePage;
 import org.wattdepot.visualization.page.home.HomePage;
 
 /**
- * Application object for your web application. If you want to run this application without
- * deploying, run the Start class.
+ * Defines the Visualzation Wicket web application.
  * 
- * @see com.mycompany.Start#main(String[])
+ * @author Bret K. Ikehara
  */
 public class VisualizationApplication extends WebApplication {
   
   /**
    * @see org.apache.wicket.Application#getHomePage()
+   * 
+   * @return {@link Class}&lt;? extends {@link BasePage}> 
    */
   @Override
-  public Class<HomePage> getHomePage() {
+  public Class<? extends BasePage> getHomePage() {
     return HomePage.class;
   }
 
