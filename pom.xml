@@ -183,8 +183,6 @@
 				<version>${checkstyle.plugin.version}</version>
 				<configuration>
 					<configLocation>${checkstyle.filter.file}</configLocation>
-					<excludes>**/tinker/**, **/jaxb/**
-					</excludes>
 				</configuration>
 				<executions>
 					<execution>
@@ -204,10 +202,6 @@
 					<linkXref>false</linkXref>
 					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
 					<minimumTokens>100</minimumTokens>
-					<excludes>
-						<exclude>**/tinker/**</exclude>
-						<exclude>**/jaxb/**</exclude>
-					</excludes>
 				</configuration>
 				<executions>
 					<execution>
@@ -245,10 +239,6 @@
 							<version>${findbugs.plugin.version}</version>
 							<configuration>
 								<excludeFilterFile>${findbugs.filter.file}</excludeFilterFile>
-								<excludes>
-									<exclude>**/jaxb/**</exclude>
-									<exclude>**/tinker/**</exclude>
-								</excludes>
 							</configuration>
 						</plugin>
 						<plugin>
@@ -257,7 +247,6 @@
 							<version>${checkstyle.plugin.version}</version>
 							<configuration>
 								<configLocation>${checkstyle.filter.file}</configLocation>
-								<excludes>**/jaxb/**, **/tinker/**</excludes>
 							</configuration>
 						</plugin>
 						<plugin>
@@ -277,10 +266,6 @@
 								<linkXref>false</linkXref>
 								<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
 								<minimumTokens>100</minimumTokens>
-								<excludes>
-									<exclude>**/tinker/**</exclude>
-									<exclude>**/jaxb/**</exclude>
-								</excludes>
 							</configuration>
 						</plugin>
 						<plugin>
@@ -290,43 +275,6 @@
 						</plugin>
 					</reportPlugins>
 				</configuration>
-			</plugin>
-			<!-- Ant tasks from anttasks.xml. These could be ported to Maven, but 
-				I haven't taken the time to do it. -->
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>${antrun.plugin.version}</version>
-				<executions>
-					<!-- Create jars during "package" phase -->
-					<execution>
-						<id>jar</id>
-						<phase>package</phase>
-						<configuration>
-							<tasks>
-								<ant antfile="${config.dir}/anttasks.build.xml" target="jar-standalone" />
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-					<!-- Autogenerate jaxb classes, destroying any custom code in those 
-						classes. This is not part of any phase, but can be called with "mvn antrun:run 
-						execution:jaxb" I haven't tested this, so no guarantees on whether it works 
-						or not. -->
-					<execution>
-						<id>jaxb</id>
-						<phase></phase>
-						<configuration>
-							<tasks>
-								<ant antfile="${config.dir}/anttasks.build.xml" target="jar-standalone" />
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<!-- Create distribution during "package" phase -->
 			<plugin>
