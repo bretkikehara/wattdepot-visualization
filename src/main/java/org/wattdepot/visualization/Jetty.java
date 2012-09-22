@@ -39,7 +39,7 @@ public class Jetty {
     WebAppContext context = new WebAppContext("", "/" + contextPath);
     context.addFilter(holder, "/*", WebAppContext.SESSIONS);
     context.setResourceBase(".");
-
+    
     Server server = new Server(port);
     server.setHandler(context);
     try {

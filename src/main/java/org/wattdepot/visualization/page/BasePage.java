@@ -14,6 +14,9 @@ public abstract class BasePage extends WebPage {
   private static final PackageResourceReference JS_YUI = new PackageResourceReference(
       BasePage.class, "yui/3.6.0/build/yui/yui-min.js");
 
+  private static final PackageResourceReference JS_PROCESSING = new PackageResourceReference(
+      BasePage.class, "processing/processing-1.4.1.min.js");
+
   /**
    * Serial ID.
    */
@@ -22,5 +25,6 @@ public abstract class BasePage extends WebPage {
   @Override
   public void renderHead(IHeaderResponse response) {
     response.renderJavaScriptReference(JS_YUI);
+    response.renderJavaScriptReference(JS_PROCESSING);
   }
 }
