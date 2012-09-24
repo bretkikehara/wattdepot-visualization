@@ -13,9 +13,6 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class Jetty {
 
-  /** The port used by this web application. */
-  private static int port = 8081;
-
   /** The context root. */
   private static String contextPath = "";
 
@@ -39,7 +36,8 @@ public class Jetty {
     WebAppContext context = new WebAppContext("", "/" + contextPath);
     context.addFilter(holder, "/*", WebAppContext.SESSIONS);
     context.setResourceBase(".");
-    
+
+    int port = Integer.valueOf(System.getenv("PORT"), 10);
     Server server = new Server(port);
     server.setHandler(context);
     try {
