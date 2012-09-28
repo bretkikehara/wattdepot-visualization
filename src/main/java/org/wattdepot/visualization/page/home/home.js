@@ -1,4 +1,4 @@
-YUI().use('node', 'wattdepot-sensor', function(Y) {
+YUI().use('node', 'wattdepot-sensor', 'wattdepot-transmission', function(Y) {
   var processing;
   (function() {
     var sketchProc, canvas;
@@ -17,8 +17,8 @@ YUI().use('node', 'wattdepot-sensor', function(Y) {
         sensor.init(P);
         
         // create the transmission
-        //transmission = new Y.WattDepot.Transmission();
-        //transmission.init(P);
+        transmission = new Y.WattDepot.Transmission();
+        transmission.init(P);
         
         // emulate sending data on a time interval.
         sendTimerMax = 50;
@@ -43,7 +43,9 @@ YUI().use('node', 'wattdepot-sensor', function(Y) {
         sensor.update();
         
         // draws the edge
-        //transmission.draw();
+        transmission.draw();
+        transmission.sendTransmission();
+        transmission.transmissionAnim();
         
       };
     };

@@ -13,24 +13,32 @@ YUI().add('wattdepot-transmission', function(Y) {
 		//creates the line 
 		edge = {
 			serverLat : {
-				def : 0
+				def : 100
 			},
 			serverLong : {
-				def : 0
+				def : 100
 			},
 			sensorLat : {
-				def : 500
+				def : 400
 			},
 			sensorLong : {
-				def : 500
+				def : 400
 			},
-			//isAnim : false		
+			bubbleLat : {
+				def : 400
+			},
+			bubbleLong : {
+				def : 400
+			},
+			isAnim : false		
 		};
 		edge.serverLat.val = edge.serverLat.def;
 		edge.serverLong.val = edge.serverLong.def;
 		edge.sensorLat.val = edge.sensorLat.def;
 		edge.sensorLong.val = edge.sensorLong.def;
-  	
+		edge.bubbleLat.val = edge.bubbleLat.def;
+		edge.bubbleLong.val = edge.bubbleLong.def;
+		
 		// Defines the public functions
 		return {
 			// Sets the server latitude.
@@ -61,6 +69,20 @@ YUI().add('wattdepot-transmission', function(Y) {
 				edge.sensorLong.def = s;
 			},
 			
+			// Sets the bubble latitude.
+			// @param s
+			//	Integer value.
+			setBubbleLat : function(s) {
+				edge.bubbleLat.def = s;
+			},
+			
+			// Sets the sensor longitude.
+			// @param s
+			//	Integer value.
+			setBubbleLong : function(s) {
+				edge.bubbleLong.def = s;
+			},
+			
 			// Initiates the transmission.
 			// @param processing
 			//	Processing object.
@@ -71,7 +93,44 @@ YUI().add('wattdepot-transmission', function(Y) {
 			// Draws the line.
 			draw : function() {				
 				P.stroke(0);
-				P.line(edge.serverLat, edge.serverLong, edge.sensorLat, edge.sensorLong);				
+				P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);				
+			},
+			
+			// Animates the transmission
+			transmissionAnim : function() {				
+				var newLat, newLong, latDiff, longDiff, i;
+				latDiff = Math.abs(edge.sensorLat-edge.serverLat)/60;
+				longDiff = Math.abs(edge.sensorLong-edge.serverLong)/60;
+				for (i=0; i<60; i++) {
+					if (edge.isAnim) {										
+						P.ellipse(edge.bubbleLat.val, edge.bubbleLong.val, 10, 10);
+						if (edge.sensorLat > edge.serverLat) {
+							setBubbleLat(edge.sensorLat - latDiff);
+						}
+						else if (edge.sensorLat < edge.serverLat) {
+							setBubbleLat(edge.sensorLat + latDiff);
+						}
+						if (edge.sensorLong > edge.serverLong) {
+							setBubbleLong(edge.sensorLong - longDiff);
+						}
+						else if (edge.sensorLong < edge.serverLong) {
+							setBubbleLong(edge.sensorLong + longDiff);
+						}
+					}
+					
+				}
+							
+
+			},
+			
+			// Sends a transmission
+			sendTransmission : function() {
+				edge.isAnim = true;
+			},
+			
+			// Returns if the server is sending a transmission.
+			isAnim : function() {
+				return edge.isAnim;
 			}
 		};
 	};
