@@ -20,8 +20,9 @@ YUI().use('node', 'wattdepot-sensor', function(Y) {
         P.size(500, 500);
 
         // create the sensor
-        sensor = new Y.WattDepot.Sensor();
-        sensor.init(P);
+        sensor = new Y.WattDepot.Sensor({
+          processing : P
+        });
 
         // emulate sending data on a time interval.
         sendTimerMax = 50;
@@ -39,7 +40,7 @@ YUI().use('node', 'wattdepot-sensor', function(Y) {
           sendTimer -= 1;
         }
         else if (sendTimer == 0) {
-          sensor.send();
+          sensor.animate();
           sendTimer = sendTimerMax;
         }
 
