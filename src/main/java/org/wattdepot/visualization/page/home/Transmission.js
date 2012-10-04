@@ -36,8 +36,8 @@ YUI().add('wattdepot-transmission', function(Y) {
 		edge.serverLong.val = edge.serverLong.def;
 		edge.sensorLat.val = edge.sensorLat.def;
 		edge.sensorLong.val = edge.sensorLong.def;
-		edge.bubbleLat.val = edge.bubbleLat.def;
-		edge.bubbleLong.val = edge.bubbleLong.def;
+		edge.bubbleLat.val = edge.sensorLat.def;
+		edge.bubbleLong.val = edge.sensorLong.def;
 		
 		// Defines the public functions
 		return {
@@ -73,14 +73,14 @@ YUI().add('wattdepot-transmission', function(Y) {
 			// @param s
 			//	Integer value.
 			setBubbleLat : function(s) {
-				edge.bubbleLat.def = s;
+				edge.bubbleLat.val = s;
 			},
 			
 			// Sets the sensor longitude.
 			// @param s
 			//	Integer value.
 			setBubbleLong : function(s) {
-				edge.bubbleLong.def = s;
+				edge.bubbleLong.val = s;
 			},
 			
 			// Initiates the transmission.
@@ -94,32 +94,33 @@ YUI().add('wattdepot-transmission', function(Y) {
 			draw : function() {				
 				P.stroke(0);
 				P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);				
+				if (edge.isAnim) {										
+					P.ellipse(edge.bubbleLat.val, edge.bubbleLong.val, 10, 10);
+				}
 			},
 			
 			// Animates the transmission
 			transmissionAnim : function() {				
-				var newLat, newLong, latDiff, longDiff, i;
-				latDiff = Math.abs(edge.sensorLat-edge.serverLat)/60;
-				longDiff = Math.abs(edge.sensorLong-edge.serverLong)/60;
-				for (i=0; i<60; i++) {
-					if (edge.isAnim) {										
-						P.ellipse(edge.bubbleLat.val, edge.bubbleLong.val, 10, 10);
-						if (edge.sensorLat > edge.serverLat) {
-							setBubbleLat(edge.sensorLat - latDiff);
-						}
-						else if (edge.sensorLat < edge.serverLat) {
-							setBubbleLat(edge.sensorLat + latDiff);
-						}
-						if (edge.sensorLong > edge.serverLong) {
-							setBubbleLong(edge.sensorLong - longDiff);
-						}
-						else if (edge.sensorLong < edge.serverLong) {
-							setBubbleLong(edge.sensorLong + longDiff);
-						}
-					}
-					
+				var latDiff, longDiff;
+				latDiff = Math.abs(edge.sensorLat.val - edge.serverLat.val)/120;
+				longDiff = Math.abs(edge.sensorLong.val - edge.serverLong.val)/120;
+				
+				if (edge.sensorLat.val > edge.serverLat.val) {
+					edge.bubbleLat.val = edge.bubbleLat.val - latDiff;
 				}
-							
+				else if (edge.sensorLat.val < edge.serverLat.val) {
+					edge.bubbleLat.val = edge.bubbleLat.val + latDiff;
+				}
+				if (edge.sensorLong.val > edge.serverLong.val) {
+					edge.bubbleLong.val = edge.bubbleLat.val - latDiff;
+				}
+				else if (edge.sensorLong.val < edge.serverLong.val) {
+					edge.bubbleLong.val = edge.bubbleLat.val - latDiff;
+				}
+				if ((edge.bubbleLat.val === edge.serverLat.val)||(edge.bubbleLong.val === edge.serverLong.val)) {
+					edge.bubbleLat.val = edge.sensorLat.val;
+					edge.bubbleLong.val = edge.sensorLong.val;
+				}									
 
 			},
 			
