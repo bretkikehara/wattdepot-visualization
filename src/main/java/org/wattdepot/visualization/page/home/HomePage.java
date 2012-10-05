@@ -22,6 +22,9 @@ public final class HomePage extends BasePage {
 
   private static final PackageResourceReference JS_SENSOR = new PackageResourceReference(
       HomePage.class, "sensor.js");
+  
+  private static final PackageResourceReference JS_TRANSMISSION = new PackageResourceReference(
+      HomePage.class, "transmission.js");
 
   @Override
   protected void onBeforeRender() {
@@ -39,6 +42,7 @@ public final class HomePage extends BasePage {
   public void renderHead(IHeaderResponse response) {
     super.renderHead(response);
 
+    response.renderJavaScriptReference(JS_TRANSMISSION);
     response.renderJavaScriptReference(JS_SENSOR);
     response.renderJavaScriptReference(JS_HOME);
   }
