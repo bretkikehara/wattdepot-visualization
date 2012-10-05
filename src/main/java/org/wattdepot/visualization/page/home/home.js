@@ -11,18 +11,27 @@ YUI().use('node', 'wattdepot-sensor', function(Y) {
      * Sketches the processing app.
      */
     sketchProc = function(P) {
-      var sensor, sendTimer, sendTimerMax;
+      var sensors, sendTimer, sendTimerMax;
 
       /**
        * Sets up the processing canvas.
        */
       P.setup = function() {
         P.size(500, 500);
+        var i;
+        sensors = [];
 
-        // create the sensor
-        sensor = new Y.WattDepot.Sensor({
-          processing : P
-        });
+        // firefox's quality will sharply degrade after 100 sensors.
+        for (i = 0; i < 10; i += 1) {
+          sensors.push(new Y.WattDepot.Sensor(P, {
+            color : [ 255, 0, 0, 0 ],
+            colorHandler : function(P, o) {
+              o.color[0] -= 2;
+            },
+            x : 400 * Math.random(),
+            y : 400 * Math.random()
+          }));
+        }
 
         // emulate sending data on a time interval.
         sendTimerMax = 50;
@@ -33,22 +42,28 @@ YUI().use('node', 'wattdepot-sensor', function(Y) {
        * Handles drawing the Processing canvas.
        */
       P.draw = function() {
+        var sensor;
         P.background(255);
-
         // mocks data being sent at an interval.
-        if (sendTimer > 0 && !sensor.isAnimate()) {
+        if (sendTimer > 0) {
           sendTimer -= 1;
         }
-        else if (sendTimer == 0) {
-          sensor.animate();
+        else if (sendTimer <= 0) {
+          for (sensor in sensors) {
+            sensors[sensor].animate();
+          }
           sendTimer = sendTimerMax;
         }
 
         // draws all items
-        sensor.draw();
+        for (sensor in sensors) {
+          sensors[sensor].draw();
+        }
 
         // updates all items.
-        sensor.update();
+        for (sensor in sensors) {
+          sensors[sensor].update();
+        }
       };
     };
 

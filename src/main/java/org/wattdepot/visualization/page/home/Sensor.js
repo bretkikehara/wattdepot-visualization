@@ -5,121 +5,125 @@
  */
 YUI().add('wattdepot-sensor', function(Y) {
   Y.namespace("WattDepot");
-  
-  var Sensor, P;
 
   /**
    * Defines the WattDepot circle.
+   * 
+   * @param processing
+   *          Processing object.
+   * @param cnf
+   *          (Optional) Config object.
    */
-  var Sensor = function(cnf) {
+  var Sensor = function(processing, cnf) {
     // define the private fields.
-    var o, P, key;
+    var o, P, key, copyArr;
+
+    /**
+     * Copies an array.
+     * 
+     * @param to
+     *          Array
+     * @param from
+     *          Array
+     */
+    copyArr = function(from) {
+      var to = [];
+      var key;
+      for (key = 0; key < from.length; key += 1) {
+        to[key] = from[key];
+      }
+      return to;
+    };
 
     // processing object.
-    P = cnf.processing;
+    P = processing;
 
     // creates the object.
     o = {
-      'radiusDef' : {
-        value : 55,
-        writeOnce : true
-      }
-      'radiusMax' : {
-        value : 100,
-        writeOnce : true
+      radius : 55,
+      radiusMax : 100,
+      color : [ 0, 0, 0, 0 ],
+      colorHandler : function() {
+        // do nothing.
       },
-      'colorHandler' : {
-        value : 255,
-        writeOnce : true
-      }
-      'colorDef' : {
-        value : {0, 0, 0, 0}
-      },
-      'color' : {
-        value : {0,0,0,0}
-      },
-      'colorHandler' : {
-        value : function() {},
-        writeOnce : true
-      },
-      'fade' : {
-        value : 2
-      },
-      'x' : {
-        value : 2
-      },
-      'y' : {
-        value : 2
-      },
-      isAnim : {
-        value : false
-      }
+      fade : 2,
+      x : 2,
+      y : 2,
+      isAnim : false
     };
-    o.radiusVal = o.radiusDef;
-    o.color.val = o.color.def;
-    
-    // sets the default attributes
-    this.addAttrs(attrs, o);
-  };
-  
 
-  /**
-   * Draws the sensor.
-   */
-  Sensor.prototype.draw = function() {
-    var c, fill;
-
-    c = P.color(o.color.val, 0, 0);
-    fill = o.radiusMax - o.radiusVal;
-    P.stroke(c, fill);
-    P.fill(c, fill);
-    P.ellipse(o.pos.x, o.pos.y, o.radiusVal, o.radiusVal);
-
-    alpha = 255;
-    P.stroke(c, alpha);
-    P.fill(c, alpha);
-    P.ellipse(o.pos.x, o.pos.y, o.radiusDef, o.radiusDef);
-  };
-
-  /**
-   * Updates the sensor.
-   */
-  Sensor.prototype.update = function() {
-    var endFade = false, endBlink = false;
-
-    // animate when data was sent.
-    if (o.isAnim) {
-      endBlink = (o.color.val < o.color.min);
-      endFade = (o.radiusVal > o.radiusMax);
-      if (!endFade) {
-        o.radiusVal += o.fade.o;
-      }
-
-      if (!endBlink) {
-        o.color.val -= o.fade.i;
-      }
-
-      // end animation when both are done.
-      if (endFade && endBlink) {
-        o.isAnim = false;
+    // override the default values.
+    if (!!cnf) {
+      for ( var key in o) {
+        if (!!cnf[key] && typeof o[key] == typeof cnf[key]) {
+          o[key] = cnf[key];
+        }
       }
     }
-  };
 
-  /**
-   * Sends the data.
-   */
-  Sensor.prototype.animate = function() {
-    o.isAnim = true;
-    o.radiusVal = o.radiusDef;
-    o.color.val = o.color.def;
+    // property that shouldn't be overridden
+    o.radiusDef = o.radius;
+    o.colorDef = copyArr(o.color);
+
+    return {
+      /**
+       * Draws the sensor.
+       */
+      draw : function() {
+        var c, fill;
+
+        c = P.color(o.color[0], o.color[1], o.color[2]);
+        fill = o.radiusMax - o.radius;
+        P.stroke(c, fill);
+        P.fill(c, fill);
+        P.ellipse(o.x, o.y, o.radius, o.radius);
+
+        alpha = 255;
+        P.stroke(c, alpha);
+        P.fill(c, alpha);
+        P.ellipse(o.x, o.y, o.radiusDef, o.radiusDef);
+      },
+      /**
+       * Updates the sensor.
+       */
+      update : function() {
+
+        // animate when data was sent.
+        if (o.isAnim) {
+          if (o.radius > o.radiusMax) {
+            o.isAnim = false
+          }
+          else {
+            o.radius += o.fade;
+          }
+
+          // updates the color.
+          if (!!o.colorHandler) {
+            o.colorHandler(P, o);
+          }
+        }
+      },
+      /**
+       * Sends the data.
+       */
+      animate : function() {
+        o.isAnim = true;
+        o.radius = o.radiusDef;
+        o.color = copyArr(o.colorDef);
+      },
+      /**
+       * Gets whether this is being animated.
+       * 
+       * @return boolean
+       */
+      isAnimate : function() {
+        return o.isAnim;
+      }
+    };
   };
-  
-  // add the attributes module's functions
-  Y.augment(Sensor, Y.Attribute);
 
   // Define object in global space.
   Y.WattDepot.Sensor = Sensor;
-}, '1.0.0', {
+}, '1.0.1', {
   requires : [ 'node-base', 'attribute' ]
 });
