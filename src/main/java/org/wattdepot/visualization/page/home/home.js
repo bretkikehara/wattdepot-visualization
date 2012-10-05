@@ -10,14 +10,18 @@ YUI().use('node', 'wattdepot-sensor', 'wattdepot-transmission', function(Y) {
       var sensor, sendTimer, sendTimerMax, transmission;
       
       P.setup = function() {
-        P.size(500, 500);
+        P.size(600, 400);
+        
+        //PImage background;
+        //background = P.loadImage("UHmap.png");
+        //image(background, 0, 0);
         
         // create the sensor
         sensor  = new Y.WattDepot.Sensor();
         sensor.init(P);
         
         // create the transmission
-        transmission = new Y.WattDepot.Transmission();
+        transmission = new Y.WattDepot.Transmission(400, 400, 100, 100);
         transmission.init(P);
         
         // emulate sending data on a time interval.

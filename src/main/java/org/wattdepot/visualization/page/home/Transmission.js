@@ -5,7 +5,7 @@ YUI().add('wattdepot-transmission', function(Y) {
 	Y.namespace("WattDepot");
   
 	// Defines WattDepot transmission
-	var Transmission = function() {
+	var Transmission = function(serLat, serLong, senLat, senLong) {
     
 		// define private fields
 		var edge, P; 
@@ -32,12 +32,12 @@ YUI().add('wattdepot-transmission', function(Y) {
 			},
 			isAnim : false		
 		};
-		edge.serverLat.val = edge.serverLat.def;
-		edge.serverLong.val = edge.serverLong.def;
-		edge.sensorLat.val = edge.sensorLat.def;
-		edge.sensorLong.val = edge.sensorLong.def;
-		edge.bubbleLat.val = edge.sensorLat.def;
-		edge.bubbleLong.val = edge.sensorLong.def;
+		edge.serverLat.val = serLat;
+		edge.serverLong.val = serLong;
+		edge.sensorLat.val = senLat;
+		edge.sensorLong.val = senLong;
+		edge.bubbleLat.val = edge.sensorLat.val;
+		edge.bubbleLong.val = edge.sensorLong.val;
 		
 		// Defines the public functions
 		return {
@@ -102,26 +102,24 @@ YUI().add('wattdepot-transmission', function(Y) {
 			// Animates the transmission
 			transmissionAnim : function() {				
 				var latDiff, longDiff;
-				latDiff = Math.abs(edge.sensorLat.val - edge.serverLat.val)/120;
-				longDiff = Math.abs(edge.sensorLong.val - edge.serverLong.val)/120;
-				
+				latDiff = Math.abs((edge.sensorLat.val - edge.serverLat.val)/120);
+				longDiff = Math.abs((edge.sensorLong.val - edge.serverLong.val)/120);
+				if ((edge.bubbleLat.val === edge.serverLat.val)||(edge.bubbleLong.val === edge.serverLong.val)) {
+					edge.bubbleLat.val = edge.sensorLat.val;
+					edge.bubbleLong.val = edge.sensorLong.val;
+				}
 				if (edge.sensorLat.val > edge.serverLat.val) {
 					edge.bubbleLat.val = edge.bubbleLat.val - latDiff;
 				}
-				else if (edge.sensorLat.val < edge.serverLat.val) {
+				else {
 					edge.bubbleLat.val = edge.bubbleLat.val + latDiff;
 				}
 				if (edge.sensorLong.val > edge.serverLong.val) {
 					edge.bubbleLong.val = edge.bubbleLat.val - latDiff;
-				}
-				else if (edge.sensorLong.val < edge.serverLong.val) {
+				}				
+				else {
 					edge.bubbleLong.val = edge.bubbleLat.val - latDiff;
-				}
-				if ((edge.bubbleLat.val === edge.serverLat.val)||(edge.bubbleLong.val === edge.serverLong.val)) {
-					edge.bubbleLat.val = edge.sensorLat.val;
-					edge.bubbleLong.val = edge.sensorLong.val;
-				}									
-
+				}						
 			},
 			
 			// Sends a transmission
