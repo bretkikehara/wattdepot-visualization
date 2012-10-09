@@ -5,6 +5,11 @@ Thumbs.db
 # java
 *.class
 
+# eclipse
+.settings/
+.classpath
+.project
+
 # Package Files #
 *.jar
 *.war
