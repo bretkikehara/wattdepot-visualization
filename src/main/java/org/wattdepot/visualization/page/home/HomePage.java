@@ -20,9 +20,6 @@ public final class HomePage extends BasePage {
   private static final PackageResourceReference JS_HOME = new PackageResourceReference(
       HomePage.class, "home.js");
 
-  private static final PackageResourceReference JS_SENSOR = new PackageResourceReference(
-      HomePage.class, "sensor.js");
-  
   private static final PackageResourceReference JS_TRANSMISSION = new PackageResourceReference(
       HomePage.class, "transmission.js");
 
@@ -43,7 +40,6 @@ public final class HomePage extends BasePage {
     super.renderHead(response);
 
     response.renderJavaScriptReference(JS_TRANSMISSION);
-    response.renderJavaScriptReference(JS_SENSOR);
     response.renderJavaScriptReference(JS_HOME);
   }
 }

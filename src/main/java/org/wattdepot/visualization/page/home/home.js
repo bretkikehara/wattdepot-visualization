@@ -1,4 +1,4 @@
-YUI().use('node', 'wattdepot-sensor', 'wattdepot-transmission', function(Y) {
+YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', function(Y) {
   var processing;
   (function() {
     var sketchProc, canvas;
@@ -6,20 +6,20 @@ YUI().use('node', 'wattdepot-sensor', 'wattdepot-transmission', function(Y) {
      * Sketches the processing app.
      */
     sketchProc = function(P) {
-      var sensor, sensors, sendTimer, sendTimerMax, transmission;
+      var sensor, sensors, sendTimer, sendTimerMax, transmission, bg;
 
       P.setup = function() {
-        P.size(600, 400);
+        P.size(600, 600);
 
         // PImage background;
-        // background = P.loadImage("UHmap.png");
-        // image(background, 0, 0);
+        bg = P.loadImage("/images/UHmap.png");
 
         // create the sensor
         sensor = new Y.WattDepot.Sensor(P, {
-          color : [ 255, 0, 0, 0 ],
+          radius : 10,
+          color : [ 0, 255, 0, 0 ],
           colorHandler : function(P, o) {
-            o.color[0] -= 2;
+            o.color[1] -= 2;
           },
           x : 400 * Math.random(),
           y : 400 * Math.random()
@@ -36,6 +36,7 @@ YUI().use('node', 'wattdepot-sensor', 'wattdepot-transmission', function(Y) {
 
       P.draw = function() {
         P.background(255);
+        P.image(bg, 0, 0);
 
         if (sendTimer > 0 && !sensor.isAnimate()) {
           sendTimer -= 1;
@@ -47,12 +48,12 @@ YUI().use('node', 'wattdepot-sensor', 'wattdepot-transmission', function(Y) {
         }
 
         // draws all items
-        sensor.draw();
         transmission.draw();
+        sensor.draw();
 
         // updates all items.
-        sensor.update();
         transmission.transmissionAnim();
+        sensor.update();
       };
     };
 

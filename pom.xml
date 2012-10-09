@@ -93,6 +93,10 @@
 				<filtering>false</filtering>
 				<directory>src/main/resources</directory>
 			</resource>
+      <resource>
+        <filtering>false</filtering>
+        <directory>src/main/webapp</directory>
+      </resource>
 			<resource>
 				<filtering>false</filtering>
 				<directory>src/main/java</directory>
@@ -146,26 +150,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jetty.version}</version>
-				<configuration>
-					<connectors>
-						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-							<port>8080</port>
-							<maxIdleTime>3600000</maxIdleTime>
-						</connector>
-						<connector implementation="org.eclipse.jetty.server.ssl.SslSocketConnector">
-							<port>8443</port>
-							<maxIdleTime>3600000</maxIdleTime>
-							<keystore>${project.build.directory}/test-classes/keystore</keystore>
-							<password>DqymI748s9iVwddnKagJ</password>
-							<keyPassword>DqymI748s9iVwddnKagJ</keyPassword>
-						</connector>
-					</connectors>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

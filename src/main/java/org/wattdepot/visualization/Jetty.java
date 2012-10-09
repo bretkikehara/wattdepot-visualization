@@ -35,9 +35,16 @@ public class Jetty {
 
     WebAppContext context = new WebAppContext("", "/" + contextPath);
     context.addFilter(holder, "/*", WebAppContext.SESSIONS);
-    context.setResourceBase(".");
+    context.setResourceBase("./src/main/webapp");
 
-    int port = Integer.valueOf(System.getenv("PORT"), 10);
+    int port;
+    try {
+      port = Integer.valueOf(System.getenv("PORT"), 10);
+    }
+    catch (Exception e) {
+      port = 8081;
+    }
+
     Server server = new Server(port);
     server.setHandler(context);
     try {

@@ -3,7 +3,7 @@
  * 
  * @author Bret K. Ikehara
  */
-YUI().add('wattdepot-sensor', function(Y) {
+YUI().add('wattdepotsensor', function(Y) {
   Y.namespace("WattDepot");
 
   /**
@@ -54,7 +54,7 @@ YUI().add('wattdepot-sensor', function(Y) {
 
     // override the default values.
     if (!!cnf) {
-      for ( var key in o) {
+      for (key in o) {
         if (!!cnf[key] && typeof o[key] == typeof cnf[key]) {
           o[key] = cnf[key];
         }
@@ -125,5 +125,5 @@ YUI().add('wattdepot-sensor', function(Y) {
   // Define object in global space.
   Y.WattDepot.Sensor = Sensor;
 }, '1.0.1', {
-  requires : [ 'node-base', 'attribute' ]
+  requires : [ 'processing' ]
 });
