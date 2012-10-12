@@ -9,7 +9,7 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', function(Y) {
       var sensor, sensors, sendTimer, sendTimerMax, transmission, bg;
 
       P.setup = function() {
-        P.size(600, 600);
+        P.size(600, 400);
 
         // PImage background;
         bg = P.loadImage("/images/UHmap.png");
@@ -26,9 +26,13 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', function(Y) {
         });
 
         // create the transmission
-        transmission = new Y.WattDepot.Transmission(400, 400, 100, 100);
-        transmission.init(P);
-
+        transmission1 = new Y.WattDepot.Transmission(95, 55, 330, 225);
+        transmission2 = new Y.WattDepot.Transmission(415, 55, 330, 225);
+        transmission3 = new Y.WattDepot.Transmission(375, 335, 330, 225);
+        transmission1.init(P);
+        transmission2.init(P);
+        transmission3.init(P);
+        
         // emulate sending data on a time interval.
         sendTimerMax = 50;
         sendTimer = sendTimerMax;
@@ -43,16 +47,22 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', function(Y) {
         }
         else if (sendTimer == 0) {
           sensor.animate();
-          transmission.sendTransmission();
+          transmission1.sendTransmission();
+          transmission2.sendTransmission();
+          transmission3.sendTransmission();
           sendTimer = sendTimerMax;
         }
 
         // draws all items
-        transmission.draw();
+        transmission1.draw();
+        transmission2.draw();
+        transmission3.draw();
         sensor.draw();
 
         // updates all items.
-        transmission.transmissionAnim();
+        transmission1.transmissionAnim();
+        transmission2.transmissionAnim();
+        transmission3.transmissionAnim();
         sensor.update();
       };
     };
