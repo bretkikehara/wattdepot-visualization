@@ -67,6 +67,22 @@ YUI().add('wattdepotsensor', function(Y) {
 
     return {
       /**
+       * Gets this x value.
+       * 
+       * @returns int
+       */
+      getX : function() {
+        return o.x;
+      },
+      /**
+       * Gets this y value.
+       * 
+       * @returns int
+       */
+      getY : function() {
+        return o.y;
+      },
+      /**
        * Draws the sensor.
        */
       draw : function() {

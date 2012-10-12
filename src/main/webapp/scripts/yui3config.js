@@ -18,7 +18,7 @@
               },
               'wattdepotserver' : {
                 fullpath : './scripts/wattdepotserver/wattdepotserver.js',
-                requires : [ 'processing', 'wattdepotsensor', 'wattdepot.transmission' ]
+                requires : [ 'processing', 'wattdepotsensor', 'wattdepot-transmission' ]
               }
             }
           }

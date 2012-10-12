@@ -48,18 +48,10 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
             radius : r,
             color : c,
             colorHandler : cHndlr,
-            x : 415,
-            y : 375
+            x : 375,
+            y : 335
           } ]
         });
-
-        // create the transmission
-        transmission1 = new Y.WattDepot.Transmission(95, 55, server.getX(), server.getY());
-        transmission2 = new Y.WattDepot.Transmission(415, 55, server.getX(), server.getY());
-        transmission3 = new Y.WattDepot.Transmission(375, 335, server.getX(), server.getY());
-        transmission1.init(P);
-        transmission2.init(P);
-        transmission3.init(P);
 
         // emulate sending data on a time interval.
         sendTimerMax = 50;
@@ -77,23 +69,15 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
           sendTimer -= 1;
         }
         else if (sendTimer == 0) {
-          transmission1.sendTransmission();
-          transmission2.sendTransmission();
-          transmission3.sendTransmission();
+          server.animate();
           sendTimer = sendTimerMax;
         }
 
         // draws all items
-        transmission1.draw();
-        transmission2.draw();
-        transmission3.draw();
         server.draw();
 
         // updates all items.
-        transmission1.transmissionAnim();
-        transmission2.transmissionAnim();
-        transmission3.transmissionAnim();
-        server.draw();
+        server.update();
       };
     };
 

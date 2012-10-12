@@ -7,7 +7,7 @@ YUI().add('wattdepotserver', function(Y) {
   Y.namespace("WattDepot");
 
   var W = Y.WattDepot;
-  
+
   /**
    * Defines the server.
    * 
@@ -19,7 +19,8 @@ YUI().add('wattdepotserver', function(Y) {
    */
   var Server = function(processing, cfg) {
 
-    var P, o, dServer, dSensors, dTrans, iSensor;
+    var P, o, key, sen, trans, getX, getY;
+
     P = processing;
     o = {
       x : 0,
@@ -38,62 +39,70 @@ YUI().add('wattdepotserver', function(Y) {
       }
     }
 
+    /**
+     * Gets this x.
+     * 
+     * @return int
+     */
+    getX = function() {
+      return o.x;
+    };
+
+    /**
+     * Gets this y.
+     * 
+     * @return int
+     */
+    getY = function() {
+      return o.y;
+    };
+
     // initialize the sensors.
-    (function() {
-      var key;
-      o.sensors = [];
-      if (!!cfg.sensors) {
-        for (key in cfg.sensors) {
-          o.sensors[key] = new W.Sensor(P, cfg.sensors[key]);
-        }
+    o.sensors = [];
+    if (!!cfg.sensors) {
+      for (key in cfg.sensors) {
+        sen = new W.Sensor(P, cfg.sensors[key]);
+        trans = new W.Transmission(sen.getX(), sen.getY(), o.x, o.y);
+        trans.init(P);
+        o.sensors[key] = {
+          sensor : sen,
+          transmission : trans
+        };
       }
-    }());
-
-    /**
-     * Draws the server.
-     */
-    dServer = function() {
-      // draw the server in the center.
-      var x, y;
-      x = o.x - o.width / 2;
-      y = o.y - o.height / 2;
-
-      P.rect(x, y, o.height, o.width, o.radius);
-    };
-
-    /**
-     * Draws the sensors.
-     */
-    dSensors = function() {
-      var key, sen;
-      for (key in o.sensors) {
-        sen = o.sensors[key];
-        sen.draw();
-      }
-    };
-
-    /**
-     * Draws the tranmission lines.
-     */
-    dTrans = function() {
-      // TODO add the transmission lines.
-    };
+    }
 
     // defines the public functions
     return {
-      getX : function() {
-        return o.x;
-      },
-      getY : function() {
-        return o.y;
+      /**
+       * Animates the server.
+       */
+      animate : function() {
+
       },
       /**
-       * Draws the server.
+       * Draws the server by the order of lowest to highest layer.
        */
       draw : function() {
-        dTrans();
-        dSensors();
-        dServer();
+        var key, obj;
+
+        // draw the transmission lines
+        for (key in o.sensors) {
+          obj = o.sensors[key].transmission;
+          obj.draw();
+        }
+
+        // draw the sensors.
+        for (key in o.sensors) {
+          obj = o.sensors[key].sensor;
+          obj.draw();
+        }
+
+        // draw the server in the center.
+        var x, y;
+        x = o.x - o.width / 2;
+        y = o.y - o.height / 2;
+
+        P.rect(x, y, o.height, o.width, o.radius);
       },
       /**
        * Updates the server animations.
@@ -107,5 +116,5 @@ YUI().add('wattdepotserver', function(Y) {
   // Define object in global space.
   Y.WattDepot.Server = Server;
 }, '1.0.0', {
-  requires : [ 'processing' ]
+  requires : [ 'processing', 'wattdepotsensor', 'wattdepot-transmission' ]
 });
