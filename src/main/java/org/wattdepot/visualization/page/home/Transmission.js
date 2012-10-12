@@ -93,6 +93,7 @@ YUI().add('wattdepot-transmission', function(Y) {
 			// Draws the line.
 			draw : function() {				
 				P.stroke(0);
+				P.strokeWeight(4);
 				P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);				
 				if (edge.isAnim) {										
 					P.ellipse(edge.bubbleLat.val, edge.bubbleLong.val, 10, 10);
@@ -101,7 +102,8 @@ YUI().add('wattdepot-transmission', function(Y) {
 			
 			// Animates the transmission
 			transmissionAnim : function() {				
-				var latDiff, longDiff;
+				var latDiff, longDiff, resetBubble;
+				/**
 				if ((edge.sensorLat.val > edge.serverLat.val) && (edge.bubbleLat.val <= edge.serverLat.val)) {
 					edge.bubbleLat.val = edge.sensorLat.val;
 				}
@@ -110,14 +112,40 @@ YUI().add('wattdepot-transmission', function(Y) {
 				}
 				if ((edge.sensorLong.val > edge.serverLong.val) && (edge.bubbleLong.val <= edge.serverLong.val)) {
 					edge.bubbleLong.val = edge.sensorLong.val;
+					P.stroke(255);
+					P.strokeWeight(9);
+					P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);
 				}
 				if ((edge.sensorLong.val < edge.serverLong.val) && (edge.bubbleLong.val >= edge.serverLong.val)) {
 					edge.bubbleLong.val = edge.sensorLong.val;
+					P.stroke(255);
+					P.strokeWeight(9);
+					P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);
 				}
+				*/
+				if ((((edge.sensorLat.val > edge.serverLat.val) 
+						&& (edge.bubbleLat.val <= edge.serverLat.val)))
+					|| (((edge.sensorLat.val < edge.serverLat.val) 
+						&& (edge.bubbleLat.val >= edge.serverLat.val)))
+					|| (((edge.sensorLong.val > edge.serverLong.val) 
+						&& (edge.bubbleLong.val <= edge.serverLong.val)))
+					|| (((edge.sensorLong.val < edge.serverLong.val) 
+						&& (edge.bubbleLong.val >= edge.serverLong.val)))) {
+					edge.bubbleLat.val = edge.sensorLat.val;
+					edge.bubbleLong.val = edge.sensorLong.val;
+					P.stroke(255);
+					P.strokeWeight(9);
+					P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);
+				}	
+				
 				latDiff = (edge.sensorLat.val - edge.serverLat.val)/120;
 				longDiff = (edge.sensorLong.val - edge.serverLong.val)/120;
 				edge.bubbleLat.val = edge.bubbleLat.val - latDiff;
-				edge.bubbleLong.val = edge.bubbleLong.val - longDiff;
+				edge.bubbleLong.val = edge.bubbleLong.val - longDiff;		
+			},
+			
+			// Flash animation
+			flash : function() {
 				
 			},
 			
