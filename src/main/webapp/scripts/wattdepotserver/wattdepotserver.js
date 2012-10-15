@@ -19,7 +19,7 @@ YUI().add('wattdepotserver', function(Y) {
    */
   var Server = function(processing, cfg) {
 
-    var P, o, key, sen, trans, getX, getY;
+    var P, o, key, sen, trans, getX, getY, timer;
 
     P = processing;
     o = {
@@ -27,7 +27,10 @@ YUI().add('wattdepotserver', function(Y) {
       y : 0,
       width : 10,
       height : 10,
-      radius : 3
+      radius : 3,
+      scaleHandler : function(energyConsumption) {
+        return energyConsmption;
+      }
     };
 
     // override the default values.
@@ -77,7 +80,11 @@ YUI().add('wattdepotserver', function(Y) {
        * Animates the server.
        */
       animate : function() {
-
+        var key;
+        for (key in o.sensors) {
+          obj = o.sensors[key].sensor.animate();
+          obj = o.sensors[key].transmission.sendTransmission();
+        }
       },
       /**
        * Draws the server by the order of lowest to highest layer.
@@ -106,10 +113,18 @@ YUI().add('wattdepotserver', function(Y) {
       },
       /**
        * Updates the server animations.
+       * 
+       * @param obj
+       *          WattDepot Sensor information.
        */
-      update : function() {
-        // TODO fix update.
-      }
+      update : function(obj) {
+        // TODO
+        var key;
+        for (key in o.sensors) {
+          obj = o.sensors[key].sensor.update();
+          obj = o.sensors[key].transmission.transmissionAnim();
+        }
+      },
     };
   };
 

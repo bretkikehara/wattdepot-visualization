@@ -10,7 +10,7 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
      * Sketches the processing app.
      */
     sketchProc = function(P) {
-      var server, sendTimer, sendTimerMax, transmission, bg;
+      var server, bg, timer, timerDef;
 
       /**
        * Set up the processing object.
@@ -52,10 +52,9 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
             y : 335
           } ]
         });
-
-        // emulate sending data on a time interval.
-        sendTimerMax = 50;
-        sendTimer = sendTimerMax;
+        
+        timer = 0;
+        timerDef = 30; 
       };
 
       /**
@@ -65,19 +64,23 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
         P.background(255);
         P.image(bg, 0, 0);
 
-        if (sendTimer > 0) {
-          sendTimer -= 1;
-        }
-        else if (sendTimer == 0) {
-          server.animate();
-          sendTimer = sendTimerMax;
-        }
-
         // draws all items
         server.draw();
 
-        // updates all items.
-        server.update();
+        // retrieves the newest WattDepot data.
+        if (timer < 0) {
+          // updates all items.
+          Y.io('page goes here', {
+            on : {
+              success : function(id, o) {
+                // parse response, then pass to update as an object.
+                server.update();
+              };
+            }
+          });
+          timer = timerDef;
+        }
+        timer -= 1;
       };
     };
 

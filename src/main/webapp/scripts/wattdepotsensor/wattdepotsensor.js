@@ -49,7 +49,8 @@ YUI().add('wattdepotsensor', function(Y) {
       fade : 2,
       x : 2,
       y : 2,
-      isAnim : false
+      isAnim : false,
+      online : true
     };
 
     // override the default values.
@@ -88,16 +89,21 @@ YUI().add('wattdepotsensor', function(Y) {
       draw : function() {
         var c, fill;
 
-        c = P.color(o.color[0], o.color[1], o.color[2]);
-        fill = o.radiusMax - o.radius;
-        P.stroke(c, fill);
-        P.fill(c, fill);
-        P.ellipse(o.x, o.y, o.radius, o.radius);
+        if (o.online) {
+          c = P.color(o.color[0], o.color[1], o.color[2]);
+          fill = o.radiusMax - o.radius;
+          P.stroke(c, fill);
+          P.fill(c, fill);
+          P.ellipse(o.x, o.y, o.radius, o.radius);
 
-        alpha = 255;
-        P.stroke(c, alpha);
-        P.fill(c, alpha);
-        P.ellipse(o.x, o.y, o.radiusDef, o.radiusDef);
+          alpha = 255;
+          P.stroke(c, alpha);
+          P.fill(c, alpha);
+          P.ellipse(o.x, o.y, o.radiusDef, o.radiusDef);
+        }
+        else {
+          // TODO draw black circle.
+        }
       },
       /**
        * Updates the sensor.
@@ -105,7 +111,7 @@ YUI().add('wattdepotsensor', function(Y) {
       update : function() {
 
         // animate when data was sent.
-        if (o.isAnim) {
+        if (o.online && o.isAnim) {
           if (o.radius > o.radiusMax) {
             o.isAnim = false
           }
@@ -123,9 +129,11 @@ YUI().add('wattdepotsensor', function(Y) {
        * Sends the data.
        */
       animate : function() {
-        o.isAnim = true;
-        o.radius = o.radiusDef;
-        o.color = copyArr(o.colorDef);
+        if (o.online) {
+          o.isAnim = true;
+          o.radius = o.radiusDef;
+          o.color = copyArr(o.colorDef);
+        }
       },
       /**
        * Gets whether this is being animated.
@@ -134,6 +142,20 @@ YUI().add('wattdepotsensor', function(Y) {
        */
       isAnimate : function() {
         return o.isAnim;
+      },
+      /**
+       * Sets this sensor online.
+       * 
+       * @param val
+       *          boolean
+       */
+      setOnline : function(val) {
+        if (typeof val == 'boolean') {
+          o.online = val;
+        }
+      },
+      isOnline : function() {
+        return o.online;
       }
     };
   };
