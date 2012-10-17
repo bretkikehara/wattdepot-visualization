@@ -61,7 +61,7 @@ YUI().add('wattdepotserver', function(Y) {
     };
 
     // initialize the sensors.
-    o.sensors = [];
+    o.sensors = {};
     if (!!cfg.sensors) {
       for (key in cfg.sensors) {
         sen = new W.Sensor(P, cfg.sensors[key]);
@@ -77,38 +77,25 @@ YUI().add('wattdepotserver', function(Y) {
     // defines the public functions
     return {
       /**
-       * Animates the server.
-       */
-      animate : function() {
-        var key;
-        for (key in o.sensors) {
-          obj = o.sensors[key].sensor.animate();
-          obj = o.sensors[key].transmission.sendTransmission();
-        }
-      },
-      /**
        * Draws the server by the order of lowest to highest layer.
        */
       draw : function() {
-        var key, obj;
+        var key;
 
         // draw the transmission lines
         for (key in o.sensors) {
-          obj = o.sensors[key].transmission;
-          obj.draw();
+          o.sensors[key].transmission.draw();
         }
 
         // draw the sensors.
         for (key in o.sensors) {
-          obj = o.sensors[key].sensor;
-          obj.draw();
+          o.sensors[key].sensor.draw();
         }
 
         // draw the server in the center.
         var x, y;
         x = o.x - o.width / 2;
         y = o.y - o.height / 2;
-
         P.rect(x, y, o.height, o.width, o.radius);
       },
       /**
@@ -118,11 +105,18 @@ YUI().add('wattdepotserver', function(Y) {
        *          WattDepot Sensor information.
        */
       update : function(obj) {
-        // TODO
-        var key;
+        //Y.log(obj);
+        var key, updateO;
+
+        // ignore all sensors that were not defined during setup.
         for (key in o.sensors) {
-          obj = o.sensors[key].sensor.update();
-          obj = o.sensors[key].transmission.transmissionAnim();
+          updateO = (!obj || !obj.sensors || !obj.sensors[key]) ? null : obj.sensors[key];
+          // update the sensor.
+          o.sensors[key].sensor.update(updateO);
+          // send animation when the sensor is animated.
+          if (o.sensors[key].sensor.isAnimate()) {
+            o.sensors[key].transmission.transmissionAnim();
+          }
         }
       },
     };

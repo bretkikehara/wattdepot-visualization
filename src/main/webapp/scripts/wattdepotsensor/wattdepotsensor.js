@@ -6,6 +6,58 @@
 YUI().add('wattdepotsensor', function(Y) {
   Y.namespace("WattDepot");
 
+  var Sensor, copyArr, offlineH, onlineH;
+
+  /**
+   * Copies an array.
+   * 
+   * @param to
+   *          Array
+   * @param from
+   *          Array
+   */
+  copyArr = function(from) {
+    var to = [];
+    var key;
+    for (key = 0; key < from.length; key += 1) {
+      to[key] = from[key];
+    }
+    return to;
+  };
+
+  /**
+   * Generates the offline handler.
+   * 
+   * @param colorDef
+   *          Array of integers.
+   */
+  offlineH = function(colorDef) {
+    var rD, gD, bD, speed;
+    speed = 2;
+    rD = colorDef[0] / speed;
+    gD = colorDef[1] / speed;
+    bD = colorDef[2] / speed;
+    return function(o) {
+      var key, anim = false;
+      o.color[0] -= speed;
+      o.color[1] -= speed;
+      o.color[2] -= speed;
+      for (key in o.color) {
+        if (o.color[key] <= 0) {
+          o.color[key] = 0;
+        }
+        else {
+          anim = true;
+        }
+      }
+
+      // continue to animate?
+      if (!anim) {
+        o.isAnim = false;
+      }
+    };
+  };
+
   /**
    * Defines the WattDepot circle.
    * 
@@ -16,23 +68,25 @@ YUI().add('wattdepotsensor', function(Y) {
    */
   var Sensor = function(processing, cnf) {
     // define the private fields.
-    var o, P, key, copyArr;
+    var o, P;
 
     /**
-     * Copies an array.
+     * Updates the object values.
      * 
-     * @param to
-     *          Array
-     * @param from
-     *          Array
+     * @param cnf
+     *          Object
      */
-    copyArr = function(from) {
-      var to = [];
+    updateO = function(cnf) {
       var key;
-      for (key = 0; key < from.length; key += 1) {
-        to[key] = from[key];
+      // override the default values.
+      if (!!cnf) {
+        for (key in o) {
+          if (!!cnf[key] && typeof o[key] == typeof cnf[key]) {
+            o[key] = cnf[key];
+            // Y.log(key + '=' + o[key]);
+          }
+        }
       }
-      return to;
     };
 
     // processing object.
@@ -52,20 +106,12 @@ YUI().add('wattdepotsensor', function(Y) {
       isAnim : false,
       online : true
     };
-
-    // override the default values.
-    if (!!cnf) {
-      for (key in o) {
-        if (!!cnf[key] && typeof o[key] == typeof cnf[key]) {
-          o[key] = cnf[key];
-        }
-      }
-    }
+    updateO(cnf);
 
     // property that shouldn't be overridden
     o.radiusDef = o.radius;
     o.colorDef = copyArr(o.color);
-
+    o.offlineHandler = offlineH(o.colorDef);
     return {
       /**
        * Gets this x value.
@@ -87,10 +133,10 @@ YUI().add('wattdepotsensor', function(Y) {
        * Draws the sensor.
        */
       draw : function() {
-        var c, fill;
+        var c, alpha, fill;
 
+        c = P.color(o.color[0], o.color[1], o.color[2]);
         if (o.online) {
-          c = P.color(o.color[0], o.color[1], o.color[2]);
           fill = o.radiusMax - o.radius;
           P.stroke(c, fill);
           P.fill(c, fill);
@@ -102,26 +148,52 @@ YUI().add('wattdepotsensor', function(Y) {
           P.ellipse(o.x, o.y, o.radiusDef, o.radiusDef);
         }
         else {
-          // TODO draw black circle.
+          P.stroke(c, 255);
+          P.fill(c, 255);
+          P.ellipse(o.x, o.y, o.radius, o.radius);
         }
       },
       /**
        * Updates the sensor.
+       * 
+       * @param obj
+       *          Object
        */
-      update : function() {
+      update : function(obj) {
+        // update the sensor settings.
+        if (!!obj) {
+          if (!!obj.isAnim && obj.isAnim) {
+            this.animate();
+          }
+          if (typeof obj.online == 'boolean') {
+            if (o.online != obj.online) {
+              this.animate();
+              o.online = obj.online;
+            }
+          }
+        }
+        
+        //TODO add boolean for the online animation.
 
         // animate when data was sent.
-        if (o.online && o.isAnim) {
-          if (o.radius > o.radiusMax) {
-            o.isAnim = false
+        if (o.isAnim) {
+          if (o.online) {
+            // animate sensor pulse
+            if (o.radius > o.radiusMax) {
+              o.isAnim = false
+            }
+            else {
+              o.radius += o.fade;
+            }
+
+            // updates the color.
+            if (!!o.colorHandler) {
+              o.colorHandler(P, o);
+            }
           }
           else {
-            o.radius += o.fade;
-          }
-
-          // updates the color.
-          if (!!o.colorHandler) {
-            o.colorHandler(P, o);
+            // animate the sensor turn offline.
+            o.offlineHandler(o);
           }
         }
       },
@@ -129,11 +201,9 @@ YUI().add('wattdepotsensor', function(Y) {
        * Sends the data.
        */
       animate : function() {
-        if (o.online) {
-          o.isAnim = true;
-          o.radius = o.radiusDef;
-          o.color = copyArr(o.colorDef);
-        }
+        o.isAnim = true;
+        o.radius = o.radiusDef;
+        o.color = copyArr(o.colorDef);
       },
       /**
        * Gets whether this is being animated.
