@@ -90,13 +90,13 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
           updateObj = {
             sensors : {
               '1' : {
-                online : (Math.random() > 0.50)
+                isOnline : (Math.random() > 0.50)
               },
               '2' : {
-                isAnim : (Math.random() > 0.50)
+                isPulse : (Math.random() > 0.50)
               },
               '3' : {
-                isAnim : (Math.random() > 0.50)
+                isPulse : (Math.random() > 0.50)
               }
             }
           };
