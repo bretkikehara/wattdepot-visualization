@@ -5,7 +5,7 @@ YUI().add('wattdepot-transmission', function(Y) {
 	Y.namespace("WattDepot");
   
 	// Defines WattDepot transmission
-	var Transmission = function(senLat, senLong, serLat, serLong) {
+	var Transmission = function(senLat, senLong, serLat, serLong, processing, cnf) {
     
 		// define private fields
 		var edge, P; 
@@ -38,6 +38,9 @@ YUI().add('wattdepot-transmission', function(Y) {
 		edge.sensorLong.val = senLong;
 		edge.bubbleLat.val = edge.sensorLat.val;
 		edge.bubbleLong.val = edge.sensorLong.val;
+		
+		// processing
+		P = processing;
 		
 		// Defines the public functions
 		return {
