@@ -25,8 +25,9 @@ YUI().add('wattdepotserver', function(Y) {
     o = {
       x : 0,
       y : 0,
-      width : 10,
-      height : 10,
+      color : [207, 43, 100, 0],
+      width : 20,
+      height : 20,
       radius : 3,
       scaleHandler : function(energyConsumption) {
         return energyConsmption;
@@ -80,7 +81,7 @@ YUI().add('wattdepotserver', function(Y) {
        * Draws the server by the order of lowest to highest layer.
        */
       draw : function() {
-        var key;
+        var key, color, x, y;
 
         // draw the transmission lines
         for (key in o.sensors) {
@@ -93,7 +94,9 @@ YUI().add('wattdepotserver', function(Y) {
         }
 
         // draw the server in the center.
-        var x, y;
+        color = P.color(o.color[0], o.color[1], o.color[2]);
+        P.stroke(color);
+        P.fill(color);
         x = o.x - o.width / 2;
         y = o.y - o.height / 2;
         P.rect(x, y, o.height, o.width, o.radius);
@@ -105,7 +108,7 @@ YUI().add('wattdepotserver', function(Y) {
        *          WattDepot Sensor information.
        */
       update : function(obj) {
-        //Y.log(obj);
+        // Y.log(obj);
         var key, updateO;
 
         // ignore all sensors that were not defined during setup.

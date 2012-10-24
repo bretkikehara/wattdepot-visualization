@@ -22,7 +22,7 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
         bg = P.loadImage("/images/UHmap.png");
 
         var c, cHndlr, r;
-        c = [ 0, 0, 255, 0 ];
+        c = [ 0, 255, 255, 0 ];
         cHndlr = function(P, o) {
           o.color[2] -= 2;
         };
@@ -35,7 +35,7 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
           sensors : {
             '1' : {
               radius : r,
-              color : c,
+              color : [90, 255, 255],
               colorHandler : cHndlr,
               x : 95,
               y : 55
@@ -58,8 +58,12 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
           }
         });
 
+        // sets update interval
         timer = 0;
         timerDef = 100;
+        
+        // set the hue/saturation/brightness color mode.
+        P.colorMode(P.HSB);
       };
 
       /**
@@ -96,7 +100,8 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
                 isPulse : (Math.random() > 0.50)
               },
               '3' : {
-                isPulse : (Math.random() > 0.50)
+                isPulse : true,
+                color : [Math.random() * 90, 255, 255, 0]
               }
             }
           };
