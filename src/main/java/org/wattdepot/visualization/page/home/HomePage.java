@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.wattdepot.visualization.VisualizationSession;
 import org.wattdepot.visualization.data.sensor.SensorModel;
@@ -103,13 +104,13 @@ public final class HomePage extends BasePage {
 
     form = new Form<HomePageModel>("form");
     form.setOutputMarkupId(true);
-    sensor1 = new CheckBox("sensor1Switch", new Model<Boolean>(sensor1Switch));
-    sensor2 = new CheckBox("sensor2Switch", new Model<Boolean>(sensor2Switch));
+    sensor1 = new CheckBox("sensor1Switch", new PropertyModel<Boolean>(this, "sensor1Switch"));
+    sensor2 = new CheckBox("sensor2Switch", new PropertyModel<Boolean>(this, "sensor2Switch"));
 
     ChoiceRenderer<HomePageChoice> choiceRenderer =
         new ChoiceRenderer<HomePageChoice>("key", "value");
     select = new DropDownChoice<HomePageChoice>("sensor3Color", list, choiceRenderer);
-    select.setDefaultModel(new Model<HomePageChoice>(choice));
+    select.setDefaultModel(new PropertyModel<HomePageChoice>(this, "choice"));
   }
 
   @Override
