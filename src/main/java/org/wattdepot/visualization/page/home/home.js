@@ -41,7 +41,6 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
               y : 55
             },
             '2' : {
-
               radius : r,
               color : c,
               colorHandler : cHndlr,
@@ -116,8 +115,7 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
     };
 
     // adds the canvas tag.
-    canvas = Y.Node.create('<canvas/>');
-    canvas.appendTo('div#bd');
+    canvas = Y.one('canvas');
 
     processing = new Processing(canvas.getDOMNode(), sketchProc);
   }());
