@@ -23,9 +23,6 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
 
         var c, cHndlr, r;
         c = [ 0, 255, 255, 0 ];
-        cHndlr = function(P, o) {
-          o.color[2] -= 2;
-        };
         r = 10;
 
         // creates the server
@@ -36,21 +33,18 @@ YUI().use('node', 'wattdepotsensor', 'wattdepot-transmission', 'wattdepotserver'
             '1' : {
               radius : r,
               color : [90, 255, 255],
-              colorHandler : cHndlr,
               x : 95,
               y : 55
             },
             '2' : {
               radius : r,
               color : c,
-              colorHandler : cHndlr,
               x : 415,
               y : 55
             },
             '3' : {
               radius : r,
               color : c,
-              colorHandler : cHndlr,
               x : 375,
               y : 335
             }

@@ -146,7 +146,7 @@ YUI().add('wattdepotsensor', function(Y) {
       radiusMax : 100,
       color : [ 0, 0, 0, 0 ],
       colorHandler : function() {
-        // do nothing.
+        o.color[2] -= 2;
       },
       fade : 2,
       x : 2,

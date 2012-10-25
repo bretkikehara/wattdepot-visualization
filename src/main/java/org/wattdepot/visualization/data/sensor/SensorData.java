@@ -1,4 +1,4 @@
-package org.wattdepot.visualization.page.home;
+package org.wattdepot.visualization.data.sensor;
 
 import org.apache.wicket.markup.MarkupType;
 import org.apache.wicket.markup.html.WebPage;
@@ -11,7 +11,7 @@ import com.google.gson.Gson;
  * @author Bret K. Ikehara
  *
  */
-public class HomePageData extends WebPage {
+public class SensorData extends WebPage {
 
   /**
    * Serial ID.
@@ -29,7 +29,7 @@ public class HomePageData extends WebPage {
     // write a JSON response instead of an HTML page.
     VisualizationSession session = (VisualizationSession) getSession();
     Gson gson = new Gson();
-    String res = gson.toJson(session.getHomePageData());
+    String res = gson.toJson(session.getServerModel().getSensors());
     
     getResponse().write(res);
   }

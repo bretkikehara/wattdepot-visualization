@@ -4,9 +4,10 @@ import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.wattdepot.visualization.data.sensor.SensorData;
+import org.wattdepot.visualization.data.server.ServerData;
 import org.wattdepot.visualization.page.BasePage;
 import org.wattdepot.visualization.page.home.HomePage;
-import org.wattdepot.visualization.page.home.HomePageData;
 
 /**
  * Defines the Visualzation Wicket web application.
@@ -23,9 +24,10 @@ public class VisualizationApplication extends WebApplication {
   @Override
   protected void init() {
     super.init();
-    mountPage("/homeData", HomePageData.class);
+    mountPage("/data/server", ServerData.class);
+    mountPage("/data/server/sensors", SensorData.class);
   }
-  
+
   /**
    * @see org.apache.wicket.Application#getHomePage()
    * 
