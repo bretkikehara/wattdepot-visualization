@@ -81,6 +81,9 @@ public final class HomePage extends BasePage {
       sensor = map.get("3");
       int[] color = sensor.getColor();
       color[0] = choice.getValue().intValue();
+
+      // TODO remove once the color handler only handles color not the whole array.
+      sensor.setColor(color);
     }
   };
 

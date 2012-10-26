@@ -35,16 +35,8 @@ public class SensorModel implements Serializable {
    * @return int
    */
   public int getRadius() {
-    return radius;
-  }
-
-  /**
-   * Sets this radius.
-   * 
-   * @param radius int
-   */
-  public void setRadius(int radius) {
-    this.radius = radius;
+    System.out.println(this.radius);
+    return this.radius;
   }
 
   /**
@@ -86,7 +78,7 @@ public class SensorModel implements Serializable {
   /**
    * Gets this color.
    * 
-   * @return
+   * @return int[]
    */
   public int[] getColor() {
     return color;
@@ -95,10 +87,13 @@ public class SensorModel implements Serializable {
   /**
    * Sets this color.
    * 
-   * @param color
+   * @param color int[]
    */
   public void setColor(int[] color) {
-    this.color = color;
+    if (this.color[0] >= 0 && this.color[0] <= 90) {
+      this.color = color;
+      this.radius = (90 - this.color[0]) / 10 + 10;
+    }
   }
 
   /**
@@ -135,7 +130,7 @@ public class SensorModel implements Serializable {
    */
   public void setPulse(boolean pulse) {
     this.pulse = pulse;
-    // set the pulse but 
+    // set the pulse but
     if (this.pulse) {
       this.online = true;
     }

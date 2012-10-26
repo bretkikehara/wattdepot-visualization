@@ -34,21 +34,18 @@ public class VisualizationSession extends Session {
     Map<String, SensorModel> map = serverModel.getSensors();
     
     SensorModel sensorModel = new SensorModel();
-    sensorModel.setRadius(10);
     sensorModel.setX(95);
     sensorModel.setY(55);
     sensorModel.setColor(new int[]{ 90, 255,255, 255});
     map.put("1", sensorModel);
 
     sensorModel = new SensorModel();
-    sensorModel.setRadius(10);
     sensorModel.setX(415);
     sensorModel.setY(55);
     sensorModel.setColor(new int[]{ 0, 255,255, 255});
     map.put("2", sensorModel);
 
     sensorModel = new SensorModel();
-    sensorModel.setRadius(10);
     sensorModel.setX(375);
     sensorModel.setY(335);
     sensorModel.setPulse(true);
