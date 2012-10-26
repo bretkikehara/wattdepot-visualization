@@ -11,7 +11,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.wattdepot.visualization.VisualizationSession;
@@ -33,6 +32,9 @@ public final class HomePage extends BasePage {
 
   private static final PackageResourceReference JS_HOME = new PackageResourceReference(
       HomePage.class, "home.js");
+
+  private static final PackageResourceReference CSS_HOME = new PackageResourceReference(
+      HomePage.class, "HomePage.css");
 
   private static final PackageResourceReference JS_TRANSMISSION = new PackageResourceReference(
       HomePage.class, "transmission.js");
@@ -93,11 +95,11 @@ public final class HomePage extends BasePage {
     final List<HomePageChoice> list =
         Arrays.asList(new HomePageChoice[] { new HomePageChoice("Little Usage", 90),
             new HomePageChoice("Medium Usage", 50), new HomePageChoice("Extreme Usage", 0) });
-    
+
     sensor1Switch = true;
     sensor2Switch = false;
     choice = list.get(0);
-    
+
     hd = new Label("hd", "");
 
     bd = new Label("ft", "");
@@ -138,7 +140,7 @@ public final class HomePage extends BasePage {
   @Override
   public void renderHead(IHeaderResponse response) {
     super.renderHead(response);
-
+    response.renderCSSReference(CSS_HOME);
     response.renderJavaScriptReference(JS_TRANSMISSION);
     response.renderJavaScriptReference(JS_HOME);
   }

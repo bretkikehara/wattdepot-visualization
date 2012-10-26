@@ -39,8 +39,6 @@ YUI().add('wattdepotsensor', function(Y) {
     o.isPulse = false;
 
     // update the color
-    o.color[0] -= speed;
-    o.color[1] -= speed;
     o.color[2] -= speed;
     for (key in o.color) {
       if (o.color[key] <= 0) {
@@ -65,11 +63,8 @@ YUI().add('wattdepotsensor', function(Y) {
    */
   onlineH = function(o) {
     var key, val = true;
-    o.isAnim = true;
 
     // update the color
-    o.color[0] += speed;
-    o.color[1] += speed;
     o.color[2] += speed;
     for (key in o.color) {
       if (o.color[key] >= o.colorDef[key]) {
@@ -210,13 +205,13 @@ YUI().add('wattdepotsensor', function(Y) {
       update : function(obj) {
         // update the sensor settings.
         if (!!obj) {
-          if (typeof obj.isOnline == 'boolean') {
+          if (typeof obj.online == 'boolean' && obj.online != o.isOnline) {
             o.radius = o.radiusDef;
             o.isPulse = false;
-            o.isOnline = obj.isOnline;
+            o.isOnline = obj.online;
             o.isAnim = true;
           }
-          if (!!obj.isPulse && obj.isPulse) {
+          if (!!obj.pulse && obj.pulse) {
             o.radius = o.radiusDef;
             if (!!obj.color) {
               o.color = copyArr(obj.color);
@@ -226,7 +221,7 @@ YUI().add('wattdepotsensor', function(Y) {
               o.color = copyArr(o.colorDef);
             }
             o.isOnline = true;
-            o.isPulse = obj.isPulse;
+            o.isPulse = obj.pulse;
             o.isAnim = o.isPulse;
           }
         }

@@ -1,0 +1,13 @@
+#doc {
+  width: 1000px;
+  margin: 0 auto;
+}
+
+#hd {
+  height: 20px;
+}
+
+.form label {
+  display: block;
+  margin-bottom : 1em;
+}

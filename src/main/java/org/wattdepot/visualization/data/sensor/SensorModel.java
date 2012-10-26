@@ -135,5 +135,9 @@ public class SensorModel implements Serializable {
    */
   public void setPulse(boolean pulse) {
     this.pulse = pulse;
+    // set the pulse but 
+    if (this.pulse) {
+      this.online = true;
+    }
   }
 }

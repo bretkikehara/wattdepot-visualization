@@ -51,6 +51,7 @@ public class VisualizationSession extends Session {
     sensorModel.setRadius(10);
     sensorModel.setX(375);
     sensorModel.setY(335);
+    sensorModel.setPulse(true);
     sensorModel.setColor(new int[]{ 0, 255,255, 255});
     map.put("3", sensorModel);
   }
