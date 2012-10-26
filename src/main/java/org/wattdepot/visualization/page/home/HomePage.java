@@ -98,10 +98,16 @@ public final class HomePage extends BasePage {
     final List<HomePageChoice> list =
         Arrays.asList(new HomePageChoice[] { new HomePageChoice("Little Usage", 90),
             new HomePageChoice("Medium Usage", 50), new HomePageChoice("Extreme Usage", 0) });
-
-    sensor1Switch = true;
-    sensor2Switch = false;
-    choice = list.get(0);
+    VisualizationSession session = (VisualizationSession) getSession();
+    ServerModel model = session.getServerModel();
+    sensor1Switch = model.getSensors().get("1").isOnline();
+    sensor2Switch = model.getSensors().get("2").isPulse();
+    SensorModel sensor = model.getSensors().get("3");
+    for (HomePageChoice choice : list) {
+      if (sensor.getColor()[0] == choice.getValue().intValue()) {
+        this.choice = choice;
+      }
+    }
 
     hd = new Label("hd", "");
 

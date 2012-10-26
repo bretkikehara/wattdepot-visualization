@@ -214,6 +214,7 @@ YUI().add('wattdepotsensor', function(Y) {
           if (!!obj.pulse && obj.pulse) {
             o.color = copyArr(obj.color);
             o.colorDef = copyArr(obj.color);
+            o.radiusDef = obj.radius;
             o.radius = obj.radius;
             o.isOnline = true;
             o.isPulse = obj.pulse;
