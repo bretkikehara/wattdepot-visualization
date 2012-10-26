@@ -118,7 +118,7 @@ YUI().add('wattdepotserver', function(Y) {
           o.sensors[key].sensor.update(updateO);
           // send animation when the sensor is animated.
           if (!!updateO && updateO.isPulse) {
-            o.sensors[key].transmission.transmissionAnim();
+            o.sensors[key].transmission.update();
           }
         }
       },

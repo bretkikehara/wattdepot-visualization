@@ -44,6 +44,34 @@ YUI().add('wattdepot-transmission', function(Y) {
 		
 		// Defines the public functions
 		return {
+			// Gets the server latitude.
+			// @param s
+			//	Integer value.
+			getServerLat : function() {
+				return edge.serverLat.val;
+			},
+			
+			// Gets the server longitude.
+			// @param s
+			//	Integer value.
+			getServerLong : function() {
+				return edge.serverLong.val;
+			},
+			
+			// Gets the sensor latitude.
+			// @param s
+			//	Integer value.
+			getSensorLat : function() {
+				return edge.sensorLat.val;
+			},
+			
+			// Gets the sensor longitude.
+			// @param s
+			//	Integer value.
+			getSensorLong : function() {
+				return edge.sensorLong.val;
+			},
+			
 			// Sets the server latitude.
 			// @param s
 			//	Integer value.
@@ -104,52 +132,10 @@ YUI().add('wattdepot-transmission', function(Y) {
 			},
 			
 			// Animates the transmission
-			transmissionAnim : function() {				
-				var latDiff, longDiff, resetBubble;
-				/**
-				if ((edge.sensorLat.val > edge.serverLat.val) && (edge.bubbleLat.val <= edge.serverLat.val)) {
-					edge.bubbleLat.val = edge.sensorLat.val;
-				}
-				if ((edge.sensorLat.val < edge.serverLat.val) && (edge.bubbleLat.val >= edge.serverLat.val)) {
-					edge.bubbleLat.val = edge.sensorLat.val;
-				}
-				if ((edge.sensorLong.val > edge.serverLong.val) && (edge.bubbleLong.val <= edge.serverLong.val)) {
-					edge.bubbleLong.val = edge.sensorLong.val;
-					P.stroke(255);
-					P.strokeWeight(9);
-					P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);
-				}
-				if ((edge.sensorLong.val < edge.serverLong.val) && (edge.bubbleLong.val >= edge.serverLong.val)) {
-					edge.bubbleLong.val = edge.sensorLong.val;
-					P.stroke(255);
-					P.strokeWeight(9);
-					P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);
-				}
-				*/
-				if ((((edge.sensorLat.val > edge.serverLat.val) 
-						&& (edge.bubbleLat.val <= edge.serverLat.val)))
-					|| (((edge.sensorLat.val < edge.serverLat.val) 
-						&& (edge.bubbleLat.val >= edge.serverLat.val)))
-					|| (((edge.sensorLong.val > edge.serverLong.val) 
-						&& (edge.bubbleLong.val <= edge.serverLong.val)))
-					|| (((edge.sensorLong.val < edge.serverLong.val) 
-						&& (edge.bubbleLong.val >= edge.serverLong.val)))) {
-					edge.bubbleLat.val = edge.sensorLat.val;
-					edge.bubbleLong.val = edge.sensorLong.val;
-					P.stroke(255);
-					P.strokeWeight(9);
-					P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);
-				}	
-				
-				latDiff = (edge.sensorLat.val - edge.serverLat.val)/120;
-				longDiff = (edge.sensorLong.val - edge.serverLong.val)/120;
-				edge.bubbleLat.val = edge.bubbleLat.val - latDiff;
-				edge.bubbleLong.val = edge.bubbleLong.val - longDiff;		
-			},
-			
-			// Flash animation
-			flash : function() {
-				
+			update : function() {				
+				P.stroke(255);
+				P.strokeWeight(9);
+				P.line(edge.serverLat.val, edge.serverLong.val, edge.sensorLat.val, edge.sensorLong.val);		
 			},
 			
 			// Sends a transmission
