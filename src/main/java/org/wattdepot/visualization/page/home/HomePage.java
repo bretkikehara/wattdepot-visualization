@@ -96,8 +96,8 @@ public final class HomePage extends BasePage {
   public HomePage() {
 
     final List<HomePageChoice> list =
-        Arrays.asList(new HomePageChoice[] { new HomePageChoice("Little Usage", 90),
-            new HomePageChoice("Medium Usage", 50), new HomePageChoice("Extreme Usage", 0) });
+        Arrays.asList(new HomePageChoice[] { new HomePageChoice("Green", 90),
+            new HomePageChoice("Yellow", 50), new HomePageChoice("Red", 0) });
     VisualizationSession session = (VisualizationSession) getSession();
     ServerModel model = session.getServerModel();
     sensor1Switch = model.getSensors().get("1").isOnline();

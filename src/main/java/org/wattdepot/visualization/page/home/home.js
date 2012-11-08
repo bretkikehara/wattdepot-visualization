@@ -1,9 +1,10 @@
 YUI().use('node', 'io', 'json-parse', 'wattdepotsensor', 'wattdepot-transmission',
     'wattdepotserver', function(Y) {
-      var processing, W, serverData;
+      var processing, W, G, serverData, map;
 
       // short cut.
       W = Y.WattDepot;
+      G = google.maps;
 
       (function() {
         var sketchProc, canvas;
@@ -42,7 +43,7 @@ YUI().use('node', 'io', 'json-parse', 'wattdepotsensor', 'wattdepot-transmission
            * Draws the processing objects.
            */
           P.draw = function() {
-            P.background(255);
+            P.background(255, 255);
             P.image(bg, 0, 0);
 
             // draws all items
@@ -70,10 +71,16 @@ YUI().use('node', 'io', 'json-parse', 'wattdepotsensor', 'wattdepot-transmission
             timer -= 1;
           };
         };
-
+        
         // adds the canvas tag.
         canvas = Y.one('canvas');
 
+        map = new G.Map(Y.one('#maps').getDOMNode(), {
+          center: new G.LatLng(-34.397, 150.644),
+          zoom: 8,
+          mapTypeId: G.MapTypeId.ROADMAP
+        });
+        
         // get the server data before starting animation.
         Y.io('/data/server', {
           on : {
