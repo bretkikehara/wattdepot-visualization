@@ -42,7 +42,27 @@ public class SensorModel extends AbstractObject {
    * @return int[]
    */
   public int[] getColor() {
-    return color;
+    int[] c = new int[3];
+    c[0] = this.color[0];
+    c[1] = this.color[1];
+    c[2] = this.color[2];
+    return c;
+  }
+
+  /**
+   * Sets this color.
+   * 
+   * @param hue int
+   * @param saturation int
+   * @param brightness int
+   */
+  public void setColor(int hue, int saturation, int brightness) {
+    if (this.color[0] >= 0 && this.color[0] <= 90) {
+      this.color[0] = hue;
+      this.color[1] = saturation;
+      this.color[2] = brightness;
+      this.radius = (90 - this.color[0]) / 10 + 10;
+    }
   }
 
   /**
@@ -51,10 +71,7 @@ public class SensorModel extends AbstractObject {
    * @param color int[]
    */
   public void setColor(int[] color) {
-    if (this.color[0] >= 0 && this.color[0] <= 90) {
-      this.color = color;
-      this.radius = (90 - this.color[0]) / 10 + 10;
-    }
+    this.setColor(color[0], color[1], color[2]);
   }
 
   /**
@@ -69,7 +86,7 @@ public class SensorModel extends AbstractObject {
   /**
    * Set this online.
    * 
-   * @param online
+   * @param online boolean
    */
   public void setOnline(boolean online) {
     this.online = online;

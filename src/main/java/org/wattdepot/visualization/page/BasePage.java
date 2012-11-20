@@ -28,6 +28,11 @@ public abstract class BasePage extends WebPage {
     response.renderJavaScriptReference("./scripts/yui3config.js");
   }
   
+  /**
+   * Gets this Visualization Session.
+   * 
+   * @return {@link VisualizationSession}
+   */
   public VisualizationSession getAppSession() {
     return (VisualizationSession) getSession();
   }
