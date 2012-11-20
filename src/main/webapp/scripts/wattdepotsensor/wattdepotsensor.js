@@ -6,8 +6,9 @@
 YUI().add('wattdepotsensor', function(Y) {
   Y.namespace("WattDepot");
 
-  var Sensor, P, copyArr, offlineH, onlineH, pulseH, speed;
-
+  var Sensor, W, P, copyArr, offlineH, onlineH, pulseH, speed;
+  W = Y.WattDepot;
+  
   /**
    * Copies an array.
    * 
@@ -111,7 +112,7 @@ YUI().add('wattdepotsensor', function(Y) {
    */
   var Sensor = function(processing, cnf) {
     // define the private fields.
-    var o;
+    var o, trans;
 
     /**
      * Updates the object values.
@@ -153,10 +154,15 @@ YUI().add('wattdepotsensor', function(Y) {
       isAnim : true
     };
     updateO(cnf);
-
+    
     // property that shouldn't be overridden
     o.radiusDef = o.radius;
     o.colorDef = copyArr(o.color);
+    o.server = cnf.server;
+
+    // create the transmission line.
+    trans = new W.Transmission(o.x, o.y, o.server.x, o.server.y);
+    trans.init(P);
     return {
       /**
        * Gets this x value.
@@ -179,6 +185,9 @@ YUI().add('wattdepotsensor', function(Y) {
        */
       draw : function() {
         var c, alpha, fill;
+        
+        // TODO fix the transmission line.
+        //trans.draw();
 
         c = P.color(o.color[0], o.color[1], o.color[2]);
         if (o.isOnline) {
@@ -230,6 +239,7 @@ YUI().add('wattdepotsensor', function(Y) {
           if (o.isOnline) {
             if (o.isPulse) {
               pulseH(o);
+              trans.sendTransmission();
             }
             else {
               onlineH(o);
@@ -250,6 +260,7 @@ YUI().add('wattdepotsensor', function(Y) {
         var point = handler(new google.maps.LatLng(o.latitude, o.longitude));
         o.x = point.x;
         o.y = point.y;
+        trans.updateXY(o.x, o.y);
       },
       /**
        * Gets whether this is pulsing.
@@ -291,7 +302,7 @@ YUI().add('wattdepotsensor', function(Y) {
   };
 
   // Define object in global space.
-  Y.WattDepot.Sensor = Sensor;
+  W.Sensor = Sensor;
 }, '1.0.1', {
   requires : [ 'processing' ]
 });

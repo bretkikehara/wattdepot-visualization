@@ -43,14 +43,16 @@ YUI()
             // handle all the long/lat update to xy conversion here.
             var key, sensor;
 
-            // update the sensor coordinates
-            for (key in server.getSensors()) {
-              sensor = server.getSensors()[key].sensor;
-              sensor.updateXY(getPointFromLatLong);
-            }
+            if (!!server) {
+              // update the sensor coordinates
+              for (key in server.getSensors()) {
+                sensor = server.getSensors()[key];
+                sensor.updateXY(getPointFromLatLong);
+              }
 
-            // updates the server coordinates
-            server.updateXY(getPointFromLatLong);
+              // updates the server coordinates
+              server.updateXY(getPointFromLatLong);
+            }
           };
           google.maps.event.addListener(map, 'tilesloaded', function() {
             // add the processing canvas overlay after the maps have loaded.

@@ -25,13 +25,12 @@ YUI().add('wattdepotserver', function(Y) {
     o = {
       x : 0,
       y : 0,
+      latitude : 0,
+      longitude : 0,
       color : [ 207, 43, 100, 0 ],
       width : 20,
       height : 20,
-      radius : 3,
-      scaleHandler : function(energyConsumption) {
-        return energyConsmption;
-      }
+      radius : 3
     };
 
     // override the default values.
@@ -65,10 +64,8 @@ YUI().add('wattdepotserver', function(Y) {
     o.sensors = {};
     if (!!cfg.sensors) {
       for (key in cfg.sensors) {
-        sen = new W.Sensor(P, cfg.sensors[key]);
-        trans = new W.Transmission(sen.getX(), sen.getY(), o.x, o.y);
-        trans.init(P);
-        o.sensors[key] = sen;
+        cfg.sensors[key].server = o;
+        o.sensors[key] = new W.Sensor(P, cfg.sensors[key]);
       }
     }
 
@@ -80,14 +77,9 @@ YUI().add('wattdepotserver', function(Y) {
       draw : function() {
         var key, color, x, y;
 
-        // draw the transmission lines
-        for (key in o.sensors) {
-          o.sensors[key].transmission.draw();
-        }
-
         // draw the sensors.
         for (key in o.sensors) {
-          o.sensors[key].sensor.draw();
+          o.sensors[key].draw();
         }
 
         // draw the server in the center.
@@ -112,7 +104,7 @@ YUI().add('wattdepotserver', function(Y) {
         for (key in o.sensors) {
           updateO = (!obj || !obj.sensors || !obj.sensors[key]) ? null : obj.sensors[key];
           // update the sensor.
-          o.sensors[key].sensor.update(updateO);
+          o.sensors[key].update(updateO);
         }
       },
       /**
