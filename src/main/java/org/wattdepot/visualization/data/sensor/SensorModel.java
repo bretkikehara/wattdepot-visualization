@@ -1,19 +1,19 @@
 package org.wattdepot.visualization.data.sensor;
 
-import java.io.Serializable;
+import org.wattdepot.visualization.data.AbstractObject;
 
 /**
  * Defines the sensor data.
  * 
  * @author Bret K. Ikehara
  */
-public class SensorModel implements Serializable {
+public class SensorModel extends AbstractObject {
 
   /**
    * Serial ID.
    */
   private static final long serialVersionUID = 6632789215916215668L;
-  private int radius, x, y;
+  private int radius;
   private int[] color;
   private boolean online, pulse;
 
@@ -22,8 +22,6 @@ public class SensorModel implements Serializable {
    */
   public SensorModel() {
     this.radius = 0;
-    this.x = 0;
-    this.y = 0;
     this.color = new int[] { 90, 255, 255, 255 };
     this.online = true;
     this.pulse = false;
@@ -35,44 +33,7 @@ public class SensorModel implements Serializable {
    * @return int
    */
   public int getRadius() {
-    System.out.println(this.radius);
     return this.radius;
-  }
-
-  /**
-   * Gets this x.
-   * 
-   * @return
-   */
-  public int getX() {
-    return x;
-  }
-
-  /**
-   * Sets this x.
-   * 
-   * @param x int
-   */
-  public void setX(int x) {
-    this.x = x;
-  }
-
-  /**
-   * Gets this y.
-   * 
-   * @return int
-   */
-  public int getY() {
-    return y;
-  }
-
-  /**
-   * Sets this y.
-   * 
-   * @param y int
-   */
-  public void setY(int y) {
-    this.y = y;
   }
 
   /**

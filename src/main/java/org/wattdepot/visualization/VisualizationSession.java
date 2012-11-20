@@ -1,4 +1,4 @@
- package org.wattdepot.visualization;
+package org.wattdepot.visualization;
 
 import java.util.Map;
 import org.apache.wicket.Session;
@@ -18,9 +18,9 @@ public class VisualizationSession extends Session {
    * Serial ID.
    */
   private static final long serialVersionUID = -758160945813555627L;
-  
+
   private ServerModel serverModel;
-  
+
   /**
    * Defines the visualization app's session.
    * 
@@ -29,33 +29,33 @@ public class VisualizationSession extends Session {
   public VisualizationSession(Request request) {
     super(request);
     serverModel = new ServerModel();
-    serverModel.setX(330);
-    serverModel.setY(255);
+    serverModel.setLatitude(21.297541420671582);
+    serverModel.setLongitude(-157.81622171401978);
     Map<String, SensorModel> map = serverModel.getSensors();
-    
-    SensorModel sensorModel = new SensorModel();
-    sensorModel.setX(95);
-    sensorModel.setY(55);
-    sensorModel.setColor(new int[]{ 90, 255,255, 255});
-    map.put("1", sensorModel);
 
+    SensorModel sensorModel = new SensorModel();
+    sensorModel.setLatitude(21.297851);
+    sensorModel.setLongitude(-157.820835);
+    sensorModel.setColor(new int[] { 90, 255, 255, 255 });
+    map.put("1", sensorModel);
+    
     sensorModel = new SensorModel();
-    sensorModel.setX(415);
-    sensorModel.setY(55);
-    sensorModel.setColor(new int[]{ 0, 255,255, 255});
+    sensorModel.setLatitude(21.30058);
+    sensorModel.setLongitude(-157.81618);
+    sensorModel.setColor(new int[] { 0, 255, 255, 255 });
     map.put("2", sensorModel);
 
     sensorModel = new SensorModel();
-    sensorModel.setX(375);
-    sensorModel.setY(335);
+    sensorModel.setLatitude(21.29639);
+    sensorModel.setLongitude(-157.81734);
     sensorModel.setPulse(true);
-    sensorModel.setColor(new int[]{ 0, 255,255, 255});
+    sensorModel.setColor(new int[] { 0, 255, 255, 255 });
     map.put("3", sensorModel);
   }
 
   @Override
   public void cleanupFeedbackMessages() {
-    // TODO Auto-generated method stub    
+    // TODO Auto-generated method stub
   }
 
   @Override
@@ -63,7 +63,7 @@ public class VisualizationSession extends Session {
     // TODO Auto-generated method stub
     return null;
   }
-  
+
   /**
    * Gets the server model.
    * 

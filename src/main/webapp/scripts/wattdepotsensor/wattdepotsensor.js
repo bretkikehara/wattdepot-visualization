@@ -144,6 +144,8 @@ YUI().add('wattdepotsensor', function(Y) {
         o.color[2] -= 2;
       },
       fade : 2,
+      latitude : 0,
+      longitude : 0,
       x : 2,
       y : 2,
       isPulse : false,
@@ -239,6 +241,17 @@ YUI().add('wattdepotsensor', function(Y) {
         }
       },
       /**
+       * Updates the latitude and longitude.
+       * 
+       * @param handler
+       *          Function
+       */
+      updateXY : function(handler) {
+        var point = handler(new google.maps.LatLng(o.latitude, o.longitude));
+        o.x = point.x;
+        o.y = point.y;
+      },
+      /**
        * Gets whether this is pulsing.
        * 
        * @return boolean
@@ -257,8 +270,22 @@ YUI().add('wattdepotsensor', function(Y) {
           o.isOnline = val;
         }
       },
+      /**
+       * Check whether this sensors is online.
+       * 
+       * @return boolean
+       */
       isOnline : function() {
         return o.isOnline;
+      },
+      /**
+       * Sets the transmission line.
+       * 
+       * @param line
+       *          Transmission
+       */
+      setTransmission : function(line) {
+        o.transmission = line;
       }
     };
   };

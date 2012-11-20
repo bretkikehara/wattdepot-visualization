@@ -25,7 +25,7 @@ YUI().add('wattdepotserver', function(Y) {
     o = {
       x : 0,
       y : 0,
-      color : [207, 43, 100, 0],
+      color : [ 207, 43, 100, 0 ],
       width : 20,
       height : 20,
       radius : 3,
@@ -68,10 +68,7 @@ YUI().add('wattdepotserver', function(Y) {
         sen = new W.Sensor(P, cfg.sensors[key]);
         trans = new W.Transmission(sen.getX(), sen.getY(), o.x, o.y);
         trans.init(P);
-        o.sensors[key] = {
-          sensor : sen,
-          transmission : trans
-        };
+        o.sensors[key] = sen;
       }
     }
 
@@ -116,12 +113,27 @@ YUI().add('wattdepotserver', function(Y) {
           updateO = (!obj || !obj.sensors || !obj.sensors[key]) ? null : obj.sensors[key];
           // update the sensor.
           o.sensors[key].sensor.update(updateO);
-          // send animation when the sensor is animated.
-          if (!!updateO && updateO.isPulse) {
-            o.sensors[key].transmission.update();
-          }
         }
       },
+      /**
+       * Updates the latitude and longitude.
+       * 
+       * @param handler
+       *          Function
+       */
+      updateXY : function(handler) {
+        var point = handler(new google.maps.LatLng(o.latitude, o.longitude));
+        o.x = point.x;
+        o.y = point.y;
+      },
+      /**
+       * Gets the sensors.
+       * 
+       * @return Array of sensors.
+       */
+      getSensors : function() {
+        return o.sensors;
+      }
     };
   };
 

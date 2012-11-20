@@ -10,9 +10,15 @@
   <div class="yui3-g">
     <div class="yui3-u-3-4">
       <!-- <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=2500+campus+rd,+hi&amp;ie=UTF8&amp;hq=&amp;hnear=2500+Campus+Rd,+Honolulu,+Hawaii+96822&amp;gl=us&amp;ll=21.299804,-157.81761&amp;spn=0.007087,0.013078&amp;t=m&amp;z=14&amp;output=embed"></iframe> -->
-      <canvas></canvas>
-      <div id="maps" style="height : 400px; width: 400px;">
+      <style>
+        #maps img {
+          z-index : 10px;
+        }
+      </style>
+      <div id="maps">
       </div>
+      <canvas>
+      </canvas>
     </div>
     <div class="yui3-u-1-4 form">
       <form wicket:id="form">
