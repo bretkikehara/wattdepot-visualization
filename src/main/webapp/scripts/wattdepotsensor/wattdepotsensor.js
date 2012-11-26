@@ -6,9 +6,9 @@
 YUI().add('wattdepotsensor', function(Y) {
   Y.namespace("WattDepot");
 
-  var Sensor, W, P, copyArr, offlineH, onlineH, pulseH, speed;
+  var Sensor, W, copyArr, offlineH, onlineH, pulseH, sendH, speed;
   W = Y.WattDepot;
-  
+
   /**
    * Copies an array.
    * 
@@ -103,6 +103,16 @@ YUI().add('wattdepotsensor', function(Y) {
   };
 
   /**
+   * Handles sending the sensor.
+   * 
+   * @param o
+   *          Sensor object.
+   */
+  sendH = function(o) {
+    // TODO fix send.
+  };
+
+  /**
    * Defines the WattDepot circle.
    * 
    * @param processing
@@ -151,18 +161,20 @@ YUI().add('wattdepotsensor', function(Y) {
       y : 2,
       isPulse : false,
       isOnline : true,
-      isAnim : true
+      isAnim : true,
+      isSend : true
     };
     updateO(cnf);
-    
+
     // property that shouldn't be overridden
     o.radiusDef = o.radius;
     o.colorDef = copyArr(o.color);
     o.server = cnf.server;
+    o.point = {
+      x : 0,
+      y : 0
+    };
 
-    // create the transmission line.
-    trans = new W.Transmission(o.x, o.y, o.server.x, o.server.y);
-    trans.init(P);
     return {
       /**
        * Gets this x value.
@@ -185,11 +197,17 @@ YUI().add('wattdepotsensor', function(Y) {
        */
       draw : function() {
         var c, alpha, fill;
-        
-        // TODO fix the transmission line.
-        //trans.draw();
 
         c = P.color(o.color[0], o.color[1], o.color[2]);
+
+        // draw the line
+        P.stroke(100, 100);
+        P.line(o.x, o.y, o.server.x, o.server.y);
+        if (o.isSend) {
+          P.point(o.point.x, o.point.y);
+        }
+
+        // draw the sensor.
         if (o.isOnline) {
           fill = o.radiusMax - o.radius;
           P.stroke(c, fill);
@@ -230,6 +248,9 @@ YUI().add('wattdepotsensor', function(Y) {
             o.isOnline = true;
             o.isPulse = obj.pulse;
             o.isAnim = o.isPulse;
+            o.isSend = true;
+            o.point.x = o.x;
+            o.point.y = o.y
           }
         }
 
@@ -239,7 +260,7 @@ YUI().add('wattdepotsensor', function(Y) {
           if (o.isOnline) {
             if (o.isPulse) {
               pulseH(o);
-              trans.sendTransmission();
+              sendH(o);
             }
             else {
               onlineH(o);
@@ -260,7 +281,6 @@ YUI().add('wattdepotsensor', function(Y) {
         var point = handler(new google.maps.LatLng(o.latitude, o.longitude));
         o.x = point.x;
         o.y = point.y;
-        trans.updateXY(o.x, o.y);
       },
       /**
        * Gets whether this is pulsing.

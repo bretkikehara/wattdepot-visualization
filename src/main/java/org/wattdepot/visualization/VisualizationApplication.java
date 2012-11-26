@@ -27,7 +27,6 @@ public class VisualizationApplication extends WebApplication {
     mountPage("/data/server", ServerData.class);
     mountPage("/data/server/sensors", SensorData.class);
   }
-
   /**
    * @see org.apache.wicket.Application#getHomePage()
    * 

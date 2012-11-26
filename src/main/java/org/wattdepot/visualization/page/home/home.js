@@ -7,7 +7,7 @@ YUI()
         'wattdepot-transmission',
         'wattdepotserver',
         function(Y) {
-          var P, server, W, G, sketchProc, canvas, serverData, map, view, width, height, getPointFromLatLong;
+          var P, server, W, G, sketchProc, canvas, serverData, map, view, width, height, getPointFromLatLong, updateCanvasPosition;
 
           // short cut.
           W = Y.WattDepot;
@@ -23,8 +23,34 @@ YUI()
             return view.getProjection().fromLatLngToContainerPixel(latLong);
           };
 
-          width = 600;
-          height = 600;
+          /**
+           * Updates the canvas position so the drawing doesn't cut off on drag.
+           */
+          updateCanvasPosition = function() {
+            // TODO find a better way to update the position.
+            // ensure the canvas is always positioned at the top left of the
+            // map.
+            var viewN = canvas.get('parentNode').get('parentNode').get('parentNode');
+            canvas.setStyle('left', (parseInt(viewN.getStyle('left'), 10) * -1) + 'px');
+            canvas.setStyle('top', (parseInt(viewN.getStyle('top'), 10) * -1) + 'px');
+
+            // handle all the long/lat update to xy conversion here.
+            var key, sensor, reg;
+
+            if (!!server) {
+              // update the sensor coordinates
+              for (key in server.getSensors()) {
+                sensor = server.getSensors()[key];
+                sensor.updateXY(getPointFromLatLong);
+              }
+
+              // updates the server coordinates
+              server.updateXY(getPointFromLatLong);
+            }
+          };
+
+          width = 1000;
+          height = 1000;
 
           // initialize the map
           mapN = Y.one('#maps');
@@ -40,23 +66,23 @@ YUI()
           view = new G.OverlayView();
           view.setMap(map);
           view.draw = function() {
-            // handle all the long/lat update to xy conversion here.
-            var key, sensor;
-
-            if (!!server) {
-              // update the sensor coordinates
-              for (key in server.getSensors()) {
-                sensor = server.getSensors()[key];
-                sensor.updateXY(getPointFromLatLong);
-              }
-
-              // updates the server coordinates
-              server.updateXY(getPointFromLatLong);
-            }
+            // nothing here.
           };
+          google.maps.event.addListener(map, 'drag', function() {
+            updateCanvasPosition();
+          });
+          google.maps.event.addListener(map, 'zoom_changed', function() {
+            updateCanvasPosition();
+          });
+          google.maps.event.addListener(map, 'dragend', function() {
+            // update the sensors.
+            view.draw();
+          });
           google.maps.event.addListener(map, 'tilesloaded', function() {
             // add the processing canvas overlay after the maps have loaded.
             view.getPanes().overlayLayer.appendChild(canvas.getDOMNode());
+
+            updateCanvasPosition();
           });
 
           /**
@@ -118,6 +144,8 @@ YUI()
 
           // adds the canvas tag.
           canvas = Y.one('canvas');
+          canvas.setStyle('position', 'absolute');
+          canvas.setStyle('border', '1px solid red');
 
           // get the server data before starting animation.
           Y.io('/data/server', {
