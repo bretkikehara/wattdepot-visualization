@@ -37,12 +37,14 @@ public class VisualizationSession extends Session {
     sensorModel.setLatitude(21.297851);
     sensorModel.setLongitude(-157.820835);
     sensorModel.setColor(new int[] { 90, 255, 255, 255 });
+    sensorModel.setEnergy((float)Math.random() * 1000);
     map.put("1", sensorModel);
     
     sensorModel = new SensorModel();
     sensorModel.setLatitude(21.30058);
     sensorModel.setLongitude(-157.81618);
     sensorModel.setColor(new int[] { 0, 255, 255, 255 });
+    sensorModel.setEnergy((float)Math.random() * 1000);
     map.put("2", sensorModel);
 
     sensorModel = new SensorModel();
@@ -50,6 +52,7 @@ public class VisualizationSession extends Session {
     sensorModel.setLongitude(-157.81734);
     sensorModel.setPulse(true);
     sensorModel.setColor(new int[] { 0, 255, 255, 255 });
+    sensorModel.setEnergy((float)Math.random() * 1000);
     map.put("3", sensorModel);
   }
 

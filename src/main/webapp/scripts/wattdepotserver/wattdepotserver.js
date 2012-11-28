@@ -32,6 +32,7 @@ YUI().add('wattdepotserver', function(Y) {
       height : 20,
       radius : 3
     };
+    
 
     // override the default values.
     if (!!cfg) {

@@ -150,6 +150,7 @@ YUI().add('wattdepotsensor', function(Y) {
     o = {
       radius : 55,
       radiusMax : 100,
+      energy : 0,
       color : [ 0, 0, 0, 0 ],
       colorHandler : function() {
         o.color[2] -= 2;
@@ -243,8 +244,7 @@ YUI().add('wattdepotsensor', function(Y) {
           if (!!obj.pulse && obj.pulse) {
             o.color = copyArr(obj.color);
             o.colorDef = copyArr(obj.color);
-            o.radiusDef = obj.radius;
-            o.radius = obj.radius;
+            o.energy = obj.energy;
             o.isOnline = true;
             o.isPulse = obj.pulse;
             o.isAnim = o.isPulse;
@@ -317,6 +317,34 @@ YUI().add('wattdepotsensor', function(Y) {
        */
       setTransmission : function(line) {
         o.transmission = line;
+      },
+      /**
+       * Energy defined in watts.
+       * 
+       * @return Number
+       */
+      getEnergy : function() {
+        // TODO update to the energy attribute.
+        return o.energy;
+      },
+      /**
+       * Gets the current radius.
+       */
+      getRadius : function() {
+        return o.radiusDef;
+      },
+      /**
+       * Sets this radius.
+       * 
+       * @param val
+       *          Radius
+       */
+      setRadius : function(val) {
+        if (Y.Lang.isNumber(val)) {
+          o.radiusDef = val;
+          o.radius = o.radiusDef;
+          o.raduisMax = o.radiusDef + 20;
+        }
       }
     };
   };

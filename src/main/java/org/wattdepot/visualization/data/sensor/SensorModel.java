@@ -13,6 +13,7 @@ public class SensorModel extends AbstractObject {
    * Serial ID.
    */
   private static final long serialVersionUID = 6632789215916215668L;
+  private float energy;
   private int radius;
   private int[] color;
   private boolean online, pulse;
@@ -25,6 +26,7 @@ public class SensorModel extends AbstractObject {
     this.color = new int[] { 90, 255, 255, 255 };
     this.online = true;
     this.pulse = false;
+    this.energy = 0f;
   }
 
   /**
@@ -112,5 +114,23 @@ public class SensorModel extends AbstractObject {
     if (this.pulse) {
       this.online = true;
     }
+  }
+
+  /**
+   * Sets this energy.
+   * 
+   * @param val float
+   */
+  public void setEnergy(float val) {
+    this.energy = val;
+  }
+
+  /**
+   * Gets this energy.
+   * 
+   * @return float
+   */
+  public float getEnergy() {
+    return this.energy;
   }
 }

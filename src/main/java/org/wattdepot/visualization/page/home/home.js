@@ -7,7 +7,7 @@ YUI()
         'wattdepot-transmission',
         'wattdepotserver',
         function(Y) {
-          var P, server, W, G, sketchProc, canvas, serverData, map, view, width, height, getPointFromLatLong, updateCanvasPosition;
+          var P, server, W, G, sketchProc, canvas, serverData, map, view, width, height, zoomHandler, updateCanvasPosition, error;
 
           // short cut.
           W = Y.WattDepot;
@@ -26,17 +26,15 @@ YUI()
           /**
            * Updates the canvas position so the drawing doesn't cut off on drag.
            */
-          updateCanvasPosition = function() {
-            // TODO find a better way to update the position.
-            // ensure the canvas is always positioned at the top left of the
+          updateCanvasPosition = function(map) {
+            var key, sensor;
+
+            // ensures that the drawing canvas is correctly positioned over the
             // map.
-            var viewN = canvas.get('parentNode').get('parentNode').get('parentNode');
-            canvas.setStyle('left', (parseInt(viewN.getStyle('left'), 10) * -1) + 'px');
-            canvas.setStyle('top', (parseInt(viewN.getStyle('top'), 10) * -1) + 'px');
+            canvas.setX(mapN.getX());
+            canvas.setY(mapN.getY());
 
             // handle all the long/lat update to xy conversion here.
-            var key, sensor, reg;
-
             if (!!server) {
               // update the sensor coordinates
               for (key in server.getSensors()) {
@@ -49,8 +47,43 @@ YUI()
             }
           };
 
-          width = 1000;
-          height = 1000;
+          /**
+           * Handles sensor scaling.
+           * 
+           * @param map
+           *          {Object} Google Map Object.
+           */
+          zoomHandler = function(map) {
+            var z, sensor, maxE = 0, r, s, minScale, maxScale;
+            z = map.getZoom() - 15;
+
+            if (!!server) {
+              for (key in server.getSensors()) {
+                sensor = server.getSensors()[key];
+                // TODO update when integrating real energy data.
+                if (sensor.getEnergy() && sensor.getEnergy() > maxE) {
+                  maxE = sensor.getEnergy();
+                }
+              }
+
+              // ((energy / (maxEnergy / maxScale)) + 1) * zoom
+              // increase denominator for larger scaling.
+              minScale = 1;
+              maxScale = 7;
+              s = (maxE / maxScale);
+              for (key in server.getSensors()) {
+                // increase
+                r = (sensor.getEnergy() / s + minScale) * z;
+                Y.log(sensor.getEnergy());
+                Y.log(key + ': ' + r);
+                sensor = server.getSensors()[key];
+                sensor.setRadius(r);
+              }
+            }
+          };
+
+          width = 600;
+          height = 600;
 
           // initialize the map
           mapN = Y.one('#maps');
@@ -58,7 +91,9 @@ YUI()
           mapN.setStyle('width', width);
           map = new G.Map(mapN.getDOMNode(), {
             center : new G.LatLng(21.30058, -157.81618),
-            zoom : 15,
+            zoom : 17,
+            maxZoom : 19,
+            minZoom : 16,
             mapTypeId : G.MapTypeId.ROADMAP
           });
 
@@ -66,23 +101,21 @@ YUI()
           view = new G.OverlayView();
           view.setMap(map);
           view.draw = function() {
-            // nothing here.
+            // need to define an empty function.
           };
           google.maps.event.addListener(map, 'drag', function() {
             updateCanvasPosition();
           });
           google.maps.event.addListener(map, 'zoom_changed', function() {
             updateCanvasPosition();
-          });
-          google.maps.event.addListener(map, 'dragend', function() {
-            // update the sensors.
-            view.draw();
+            zoomHandler(map);
           });
           google.maps.event.addListener(map, 'tilesloaded', function() {
             // add the processing canvas overlay after the maps have loaded.
             view.getPanes().overlayLayer.appendChild(canvas.getDOMNode());
 
             updateCanvasPosition();
+            zoomHandler(map);
           });
 
           /**
@@ -110,6 +143,8 @@ YUI()
 
               // set the hue/saturation/brightness color mode.
               P.colorMode(P.HSB);
+
+              error = 0;
             };
 
             /**
@@ -122,13 +157,16 @@ YUI()
               server.draw();
 
               // retrieves the newest WattDepot data.
-              if (timer < 0) {
+              if (timer < 0 && error < 4) {
                 // updates all items.
                 Y.io('data/server', {
                   on : {
                     success : function(id, o) {
                       // parse response, then pass to update as an object.
                       serverData = Y.JSON.parse(o.responseText);
+                    },
+                    failure : function(id, o) {
+                      error += 1;
                     }
                   }
                 });
@@ -144,8 +182,6 @@ YUI()
 
           // adds the canvas tag.
           canvas = Y.one('canvas');
-          canvas.setStyle('position', 'absolute');
-          canvas.setStyle('border', '1px solid red');
 
           // get the server data before starting animation.
           Y.io('/data/server', {
