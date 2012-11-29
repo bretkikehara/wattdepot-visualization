@@ -88,9 +88,9 @@ YUI().add('wattdepotsensor', function(Y) {
    *          Sensor object.
    */
   pulseH = function(o) {
-    // animate sensor pulse
     if (o.radius > o.radiusMax) {
       o.isAnim = false;
+      o.radius = o.radiusDef;
     }
     else {
       o.radius += o.fade;
@@ -236,7 +236,6 @@ YUI().add('wattdepotsensor', function(Y) {
         // update the sensor settings.
         if (!!obj) {
           if (typeof obj.online == 'boolean' && obj.online != o.isOnline) {
-            o.radius = o.radiusDef;
             o.isPulse = false;
             o.isOnline = obj.online;
             o.isAnim = true;
@@ -246,11 +245,11 @@ YUI().add('wattdepotsensor', function(Y) {
             o.colorDef = copyArr(obj.color);
             o.energy = obj.energy;
             o.isOnline = true;
-            o.isPulse = obj.pulse;
-            o.isAnim = o.isPulse;
+            o.isPulse = true;
+            o.isAnim = true;
             o.isSend = true;
             o.point.x = o.x;
-            o.point.y = o.y
+            o.point.y = o.y;
           }
         }
 
@@ -259,6 +258,7 @@ YUI().add('wattdepotsensor', function(Y) {
         if (o.isAnim) {
           if (o.isOnline) {
             if (o.isPulse) {
+              Y.log('handle pulse');
               pulseH(o);
               sendH(o);
             }
