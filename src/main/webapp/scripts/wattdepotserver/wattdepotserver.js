@@ -98,7 +98,6 @@ YUI().add('wattdepotserver', function(Y) {
        *          WattDepot Sensor information.
        */
       update : function(obj) {
-        // Y.log(obj);
         var key, updateO;
 
         // ignore all sensors that were not defined during setup.

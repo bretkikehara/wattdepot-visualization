@@ -6,7 +6,7 @@
 YUI().add('wattdepotsensor', function(Y) {
   Y.namespace("WattDepot");
 
-  var Sensor, W, copyArr, offlineH, onlineH, pulseH, sendH, speed;
+  var Sensor, W, copyArr, offlineH, onlineH, pulseH, sendH, colorH, speed;
   W = Y.WattDepot;
 
   /**
@@ -97,9 +97,7 @@ YUI().add('wattdepotsensor', function(Y) {
     }
 
     // updates the color.
-    if (!!o.colorHandler) {
-      o.colorHandler(P, o);
-    }
+    fadeH(P, o);
   };
 
   /**
@@ -110,6 +108,33 @@ YUI().add('wattdepotsensor', function(Y) {
    */
   sendH = function(o) {
     // TODO fix send.
+  };
+
+  /**
+   * Handles the color.
+   * 
+   * @param o
+   *          Sensor object.
+   */
+  colorH = function(o) {
+    var e = o.energy, c = 0;
+    if (e > 700) {
+      e = 700;
+    }
+
+    // get color where green is
+    c = parseInt(75 - (e / (700 / 75)), 10);
+    if (c < 0) {
+      c = 0;
+    }
+    o.colorDef = [ c, 255, 255, 255 ];
+    o.color = copyArr(o.colorDef);
+  };
+
+  fadeH = function(o) {
+    if (o.color[2] > 50) {
+      o.color[2] -= 2;
+    }
   };
 
   /**
@@ -137,7 +162,6 @@ YUI().add('wattdepotsensor', function(Y) {
         for (key in o) {
           if (!!cnf[key] && typeof o[key] == typeof cnf[key]) {
             o[key] = cnf[key];
-            // Y.log(key + '=' + o[key]);
           }
         }
       }
@@ -151,30 +175,24 @@ YUI().add('wattdepotsensor', function(Y) {
       radius : 55,
       radiusMax : 100,
       energy : 0,
-      color : [ 0, 0, 0, 0 ],
-      colorHandler : function() {
-        o.color[2] -= 2;
-      },
       fade : 2,
       latitude : 0,
       longitude : 0,
-      x : 2,
-      y : 2,
       isPulse : false,
       isOnline : true,
       isAnim : true,
-      isSend : true
+      isSend : false
     };
     updateO(cnf);
 
     // property that shouldn't be overridden
     o.radiusDef = o.radius;
-    o.colorDef = copyArr(o.color);
     o.server = cnf.server;
     o.point = {
       x : 0,
       y : 0
     };
+    colorH(o);
 
     return {
       /**
@@ -239,11 +257,11 @@ YUI().add('wattdepotsensor', function(Y) {
             o.isPulse = false;
             o.isOnline = obj.online;
             o.isAnim = true;
+            colorH(o);
           }
           if (!!obj.pulse && obj.pulse) {
-            o.color = copyArr(obj.color);
-            o.colorDef = copyArr(obj.color);
             o.energy = obj.energy;
+            colorH(o);
             o.isOnline = true;
             o.isPulse = true;
             o.isAnim = true;
@@ -258,7 +276,6 @@ YUI().add('wattdepotsensor', function(Y) {
         if (o.isAnim) {
           if (o.isOnline) {
             if (o.isPulse) {
-              Y.log('handle pulse');
               pulseH(o);
               sendH(o);
             }
@@ -340,11 +357,9 @@ YUI().add('wattdepotsensor', function(Y) {
        *          Radius
        */
       setRadius : function(val) {
-        if (Y.Lang.isNumber(val)) {
-          o.radiusDef = val;
-          o.radius = o.radiusDef;
-          o.raduisMax = o.radiusDef + 20;
-        }
+        o.radiusDef = parseInt(val, 10);
+        o.radius = o.radiusDef;
+        o.raduisMax = o.radiusDef + 20;
       }
     };
   };

@@ -1,21 +1,8 @@
 package org.wattdepot.visualization.page.home;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.wattdepot.visualization.VisualizationSession;
-import org.wattdepot.visualization.data.sensor.SensorModel;
-import org.wattdepot.visualization.data.server.ServerModel;
 import org.wattdepot.visualization.page.BasePage;
 
 /**
@@ -40,88 +27,14 @@ public final class HomePage extends BasePage {
       HomePage.class, "transmission.js");
 
   private Label hd, bd;
-  private Form<HomePageModel> form;
-
-  // defines our page variables.
-  private CheckBox sensor1, sensor2;
-  private DropDownChoice<HomePageChoice> select;
-
-  /**
-   * Define the change behavior for the update.
-   */
-  class ChangeBehavior extends AjaxFormComponentUpdatingBehavior {
-
-    /**
-     * Default Constructor.
-     */
-    public ChangeBehavior() {
-      super("onchange");
-    }
-
-    /**
-     * Serial ID.
-     */
-    private static final long serialVersionUID = -7240939017685146857L;
-
-    @Override
-    protected void onUpdate(AjaxRequestTarget target) {
-      target.add(form);
-
-      // updates the server model.
-      VisualizationSession session = (VisualizationSession) form.getSession();
-      ServerModel server = session.getServerModel();
-      Map<String, SensorModel> map = server.getSensors();
-
-      SensorModel sensor = map.get("1");
-      sensor.setOnline(sensor1Switch.booleanValue());
-
-      sensor = map.get("2");
-      sensor.setPulse(sensor2Switch.booleanValue());
-
-      sensor = map.get("3");
-      int[] color = sensor.getColor();
-      color[0] = choice.getValue().intValue();
-
-      // TODO remove once the color handler only handles color not the whole array.
-      sensor.setColor(color);
-    }
-  };
-
-  protected Boolean sensor1Switch, sensor2Switch;
-  protected HomePageChoice choice;
 
   /**
    * Default Constructor.
    */
   public HomePage() {
-
-    final List<HomePageChoice> list =
-        Arrays.asList(new HomePageChoice[] { new HomePageChoice("Green", 90),
-            new HomePageChoice("Yellow", 50), new HomePageChoice("Red", 0) });
-    VisualizationSession session = (VisualizationSession) getSession();
-    ServerModel model = session.getServerModel();
-    sensor1Switch = model.getSensors().get("1").isOnline();
-    sensor2Switch = model.getSensors().get("2").isPulse();
-    SensorModel sensor = model.getSensors().get("3");
-    for (HomePageChoice choice : list) {
-      if (sensor.getColor()[0] == choice.getValue().intValue()) {
-        this.choice = choice;
-      }
-    }
-
     hd = new Label("hd", "");
 
     bd = new Label("ft", "");
-
-    form = new Form<HomePageModel>("form");
-    form.setOutputMarkupId(true);
-    sensor1 = new CheckBox("sensor1Switch", new PropertyModel<Boolean>(this, "sensor1Switch"));
-    sensor2 = new CheckBox("sensor2Switch", new PropertyModel<Boolean>(this, "sensor2Switch"));
-
-    ChoiceRenderer<HomePageChoice> choiceRenderer =
-        new ChoiceRenderer<HomePageChoice>("key", "value");
-    select = new DropDownChoice<HomePageChoice>("sensor3Color", list, choiceRenderer);
-    select.setDefaultModel(new PropertyModel<HomePageChoice>(this, "choice"));
   }
 
   @Override
@@ -131,19 +44,6 @@ public final class HomePage extends BasePage {
     add(hd);
 
     add(bd);
-
-    add(form);
-
-    // add checkbox.
-    form.add(sensor1);
-    sensor1.add(new ChangeBehavior());
-
-    form.add(sensor2);
-    sensor2.add(new ChangeBehavior());
-
-    // add select button.
-    form.add(select);
-    select.add(new ChangeBehavior());
   }
 
   @Override
