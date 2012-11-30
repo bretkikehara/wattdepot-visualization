@@ -68,7 +68,11 @@ YUI().use('node', 'io', 'json-parse', 'wattdepotsensor', 'wattdepotserver', func
           r = minScale;
         }
         sensor.setRadius(r * z);
+
+        // scales the line
+        sensor.scaleLine();
       }
+
     }
   };
 
@@ -127,7 +131,7 @@ YUI().use('node', 'io', 'json-parse', 'wattdepotsensor', 'wattdepotserver', func
 
       // sets update interval
       timer = 0;
-      timerDef = 100;
+      timerDef = 50;
 
       // set the hue/saturation/brightness color mode.
       P.colorMode(P.HSB);

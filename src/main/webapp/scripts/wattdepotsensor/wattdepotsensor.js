@@ -6,7 +6,7 @@
 YUI().add('wattdepotsensor', function(Y) {
   Y.namespace("WattDepot");
 
-  var Sensor, W, copyArr, offlineH, onlineH, pulseH, sendH, colorH, speed;
+  var Sensor, W, copyArr, offlineH, onlineH, pulseH, sendH, colorH, speed, getDistance, sendScale;
   W = Y.WattDepot;
 
   /**
@@ -28,6 +28,8 @@ YUI().add('wattdepotsensor', function(Y) {
 
   // online/offline color value.
   speed = 2;
+  sendScale = 5;
+
   /**
    * Sets the sensor offline.
    * 
@@ -107,7 +109,45 @@ YUI().add('wattdepotsensor', function(Y) {
    *          Sensor object.
    */
   sendH = function(o) {
-    // TODO fix send.
+    var step, compH, len;
+
+    len = o.point.len;
+    if (o.isSend) {
+      step = {
+        x : Math.abs(o.x - o.server.x) / len,
+        y : Math.abs(o.y - o.server.y) / len
+      };
+
+      if (o.x > o.server.x) {
+        o.point.x = o.point.x - step.x;
+        if (o.y > o.server.y) {
+          o.point.y = o.point.y - step.y;
+        }
+        else {
+          o.point.y = o.point.y + step.y;
+        }
+      }
+      else {
+        o.point.x = o.point.x + step.x;
+        if (o.y > o.server.y) {
+          o.point.y = o.point.y - step.y;
+        }
+        else {
+          o.point.y = o.point.y + step.y;
+        }
+      }
+    }
+
+    if (getDistance(o.x, o.y, o.point.x, o.point.y) / sendScale >= len) {
+      o.isSend = false;
+    }
+  };
+
+  /**
+   * Calculates the distance between two points.
+   */
+  getDistance = function(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
   };
 
   /**
@@ -190,7 +230,8 @@ YUI().add('wattdepotsensor', function(Y) {
     o.server = cnf.server;
     o.point = {
       x : 0,
-      y : 0
+      y : 0,
+      count : 0
     };
     colorH(o);
 
@@ -221,9 +262,11 @@ YUI().add('wattdepotsensor', function(Y) {
 
         // draw the line
         P.stroke(100, 100);
+        P.fill(100, fill);
         P.line(o.x, o.y, o.server.x, o.server.y);
         if (o.isSend) {
-          P.point(o.point.x, o.point.y);
+          sendH(o);
+          P.ellipse(o.point.x, o.point.y, 4, 4);
         }
 
         // draw the sensor.
@@ -268,6 +311,7 @@ YUI().add('wattdepotsensor', function(Y) {
             o.isSend = true;
             o.point.x = o.x;
             o.point.y = o.y;
+            o.point.count = 0;
           }
         }
 
@@ -360,6 +404,10 @@ YUI().add('wattdepotsensor', function(Y) {
         o.radiusDef = parseInt(val, 10);
         o.radius = o.radiusDef;
         o.raduisMax = o.radiusDef + 20;
+      },
+      scaleLine : function() {
+        // update the length of the line
+        o.point.len = getDistance(o.x, o.y, o.server.x, o.server.y) / sendScale;
       }
     };
   };

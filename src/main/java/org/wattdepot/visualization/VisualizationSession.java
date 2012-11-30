@@ -36,14 +36,14 @@ public class VisualizationSession extends Session {
     SensorModel sensorModel = new SensorModel();
     sensorModel.setLatitude(21.297851);
     sensorModel.setLongitude(-157.820835);
-    sensorModel.setPulse(true);
+    sensorModel.setPulse(Math.random() * 100 > 50);
     sensorModel.setEnergy((float) Math.random() * 1000);
     map.put("1", sensorModel);
 
     sensorModel = new SensorModel();
     sensorModel.setLatitude(21.30058);
     sensorModel.setLongitude(-157.81618);
-    sensorModel.setPulse(true);
+    sensorModel.setPulse(Math.random() * 100 > 50);
     sensorModel.setEnergy((float) Math.random() * 1000);
     map.put("2", sensorModel);
 
