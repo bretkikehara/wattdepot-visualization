@@ -14,7 +14,7 @@
 				<include>README*</include>
 				<include>.classpath</include>
 				<include>.project</include>
-				<include>*.html</include>
+        <include>*.xml</include>
 			</includes>
 			<useDefaultExcludes>true</useDefaultExcludes>
 		</fileSet>

@@ -53,6 +53,55 @@ public class VisualizationSession extends Session {
     sensorModel.setPulse(true);
     sensorModel.setEnergy((float) Math.random() * 1000);
     map.put("3", sensorModel);
+
+    sensorModel = new SensorModel();
+    sensorModel.setLatitude(21.30031);
+    sensorModel.setLongitude(-157.81719);
+    sensorModel.setPulse(true);
+    sensorModel.setEnergy((float) Math.random() * 1000);
+    map.put("4", sensorModel);
+
+    sensorModel = new SensorModel();
+    sensorModel.setLatitude(21.29915);
+    sensorModel.setLongitude(-157.81725);
+    sensorModel.setPulse(true);
+    sensorModel.setEnergy((float) Math.random() * 1000);
+    map.put("5", sensorModel);
+
+    sensorModel = new SensorModel();
+    sensorModel.setLatitude(21.29820);
+    sensorModel.setLongitude(-157.81862);
+    sensorModel.setPulse(true);
+    sensorModel.setEnergy((float) Math.random() * 1000);
+    map.put("6", sensorModel);
+
+    sensorModel = new SensorModel();
+    sensorModel.setLatitude(21.29850);
+    sensorModel.setLongitude(-157.82033);
+    sensorModel.setPulse(true);
+    sensorModel.setEnergy((float) Math.random() * 1000);
+    map.put("7", sensorModel);
+
+    sensorModel = new SensorModel();
+    sensorModel.setLatitude(21.29496);
+    sensorModel.setLongitude(-157.81849);
+    sensorModel.setPulse(true);
+    sensorModel.setEnergy((float) Math.random() * 1000);
+    map.put("8", sensorModel);
+
+    sensorModel = new SensorModel();
+    sensorModel.setLatitude(21.29428);
+    sensorModel.setLongitude(-157.81887);
+    sensorModel.setPulse(true);
+    sensorModel.setEnergy((float) Math.random() * 1000);
+    map.put("9", sensorModel);
+
+    sensorModel = new SensorModel();
+    sensorModel.setLatitude(21.29569);
+    sensorModel.setLongitude(-157.81399);
+    sensorModel.setPulse(true);
+    sensorModel.setEnergy((float) Math.random() * 1000);
+    map.put("10", sensorModel);
   }
 
   @Override

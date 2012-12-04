@@ -23,9 +23,6 @@ public final class HomePage extends BasePage {
   private static final PackageResourceReference CSS_HOME = new PackageResourceReference(
       HomePage.class, "HomePage.css");
 
-  private static final PackageResourceReference JS_TRANSMISSION = new PackageResourceReference(
-      HomePage.class, "transmission.js");
-
   private Label hd, bd;
 
   /**
@@ -50,7 +47,6 @@ public final class HomePage extends BasePage {
   public void renderHead(IHeaderResponse response) {
     super.renderHead(response);
     response.renderCSSReference(CSS_HOME);
-    response.renderJavaScriptReference(JS_TRANSMISSION);
     response.renderJavaScriptReference(JS_HOME);
   }
 }

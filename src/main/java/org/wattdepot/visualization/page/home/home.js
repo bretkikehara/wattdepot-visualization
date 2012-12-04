@@ -78,8 +78,8 @@ YUI().use('node', 'io', 'json-parse', 'wattdepotsensor', 'wattdepotserver', func
 
   // initialize the map
   map = new google.maps.Map(mapN.getDOMNode(), {
-    center : new google.maps.LatLng(21.30058, -157.81618),
-    zoom : 17,
+    center : new google.maps.LatLng(21.297541420671582, -157.81622171401978),
+    zoom : 16,
     maxZoom : 19,
     minZoom : 16,
     mapTypeId : google.maps.MapTypeId.ROADMAP
