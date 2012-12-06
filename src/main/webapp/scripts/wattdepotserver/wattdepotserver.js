@@ -132,5 +132,5 @@ YUI().add('wattdepotserver', function(Y) {
   // Define object in global space.
   Y.WattDepot.Server = Server;
 }, '1.0.0', {
-  requires : [ 'processing', 'wattdepotsensor', 'wattdepot-transmission' ]
+  requires : [ 'processing', 'wattdepotsensor' ]
 });

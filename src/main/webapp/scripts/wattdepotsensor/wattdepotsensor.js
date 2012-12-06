@@ -395,6 +395,12 @@ YUI().add('wattdepotsensor', function(Y) {
         return o.radiusDef;
       },
       /**
+       * Gets the max radius.
+       */
+      getMaxRadius : function() {
+        return o.radiusMax;
+      },
+      /**
        * Sets this radius.
        * 
        * @param val
@@ -403,11 +409,14 @@ YUI().add('wattdepotsensor', function(Y) {
       setRadius : function(val) {
         o.radiusDef = parseInt(val, 10);
         o.radius = o.radiusDef;
-        o.raduisMax = o.radiusDef + 20;
+        o.radiusMax = o.radiusDef + 20;
       },
       scaleLine : function() {
         // update the length of the line
         o.point.len = getDistance(o.x, o.y, o.server.x, o.server.y) / sendScale;
+      },
+      getInfo : function() {
+        return 'Energy: ' + o.energy + 'kW';
       }
     };
   };
